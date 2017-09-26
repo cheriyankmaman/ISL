@@ -15,25 +15,26 @@
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="js/angular.min.js"></script>
-<script type="text/javascript" src="js/champiansScript.js"></script>
+<script type="text/javascript" src="js/championsScript.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
 <!-- you need to include the shieldui css and js assets in order for the charts to work -->
 <link rel="stylesheet" type="text/css"
-	href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
+	href="css/all1.min.css" />
 <link id="gridcss" rel="stylesheet" type="text/css"
-	href="http://www.shieldui.com/shared/components/latest/css/dark-bootstrap/all.min.css" />
+	href="css/all2.min.css" />
 
-<script type="text/javascript"
-	src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
-<script type="text/javascript" src="http://www.prepbootstrap.com/Content/js/gridData.js"></script>
 </head>
 <body>
 	<div id="wrapper" ng-app="campiansApp" ng-controller="champiansCtrl"
-		ng-init="initGroupPage()">
+		ng-init="initGroupPage('others')">
+		<div class="loading" ng-if="contentLoaded">
+			<div id="loader"></div>
+		</div>
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -42,55 +43,21 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">Champians</a>
+				<a class="navbar-brand" href="index.html">Champions</a>
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul id="active" class="nav navbar-nav side-nav">
-					<li><a href="index.html"><i class="fa fa-bullseye"></i>
+					<li ng-click="changeGroup(-1,{})" ng-class="dash"><a href="index.html"><i class="fa fa-bullseye"></i>
 							Dashboard</a></li>
-					<li ng-class="select[$index]" ng-repeat="x in groups"
+					<li ng-class="select[$index]" ng-repeat="x in allGroups"
 						ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
 							class="fa fa-tasks"></i> {{x.name}}</a></li>
-					<li><a href="portfolio.html"><i class="fa fa-tasks"></i>
-							Portfolio</a></li>
-					<li><a href="blog.html"><i class="fa fa-globe"></i> Blog</a></li>
-					<li><a href="signup.html"><i class="fa fa-list-ol"></i>
-							SignUp</a></li>
-					<li><a href="register.html"><i class="fa fa-font"></i>
-							Register</a></li>
-					<li><a href="timeline.html"><i class="fa fa-font"></i>
-							Timeline</a></li>
-					<li><a href="forms.html"><i class="fa fa-list-ol"></i>
-							Forms</a></li>
-					<li><a href="typography.html"><i class="fa fa-font"></i>
-							Typography</a></li>
-					<li><a href="bootstrap-elements.html"><i
-							class="fa fa-list-ul"></i> Bootstrap Elements</a></li>
-					<li><a href="bootstrap-grid.html"><i class="fa fa-table"></i>
-							Bootstrap Grid</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right navbar-user">
-					<li class="dropdown messages-dropdown"><a href="#"
-						class="dropdown-toggle" data-toggle="dropdown"><i
-							class="fa fa-envelope"></i> Messages <span class="badge">2</span>
-							<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li class="dropdown-header">2 New Messages</li>
-							<li class="message-preview"><a href="#"> <span
-									class="avatar"><i class="fa fa-bell"></i></span> <span
-									class="message">Security alert</span>
-							</a></li>
-							<li class="divider"></li>
-							<li class="message-preview"><a href="#"> <span
-									class="avatar"><i class="fa fa-bell"></i></span> <span
-									class="message">Security alert</span>
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="#">Go to Inbox <span class="badge">2</span></a></li>
-						</ul></li>
+					
 					<li class="dropdown user-dropdown"><a href="#"
 						class="dropdown-toggle" data-toggle="dropdown"><i
-							class="fa fa-user"></i> {{profile.fname}} {{profile.lname}}<b
+							class="fa fa-user"></i> {{profile[0].fname}} {{profile[0].lname}}<b
 							class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="#"><i class="fa fa-user"></i>
@@ -112,8 +79,8 @@
 				<div class="col-lg-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading col-lg-12">
-							<div class="col-lg-10" ng-if="gamePlan.fscore!=gamePlan.sscore">
-								<h3 class="panel-title">
+							<div class="col-lg-10" ng-if="gamePlan.fscore!=gamePlan.sscore" ng-hide="notStarted">
+								<h3 class="panel-title" ng-if="gamePlan.fscore">
 									<i class="fa fa-trophy"></i>
 									{{gamePlan.fbat}}({{gamePlan.fscore}}/{{gamePlan.ffow}}-{{gamePlan.fover}})
 									vs
@@ -127,7 +94,7 @@
 									{{gamePlan.fscore>gamePlan.sscore ? 'runs':'wickets'}}, man of
 									the match {{gamePlan.motm}}</h6>
 							</div>
-							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore">
+							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore" ng-hide="notStarted">
 								<h3 class="panel-title">
 									<i class="fa fa-trophy"></i>
 									{{gamePlan.fbat}}({{gamePlan.fscore}}/{{gamePlan.ffow}}-{{gamePlan.fover}})
@@ -137,7 +104,11 @@
 								</h3>
 								<h6>Match tied</h6>
 							</div>
-							<div class="col-lg-2">
+							
+							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore" ng-show="notStarted">
+								<h3 class="panel-title">Match is about to start!</h3>
+							</div>
+							<div class="col-lg-2" ng-hide="notStarted">
 								<select class="form-control" ng-model="gamePlan"
 									ng-options="x.match for x in gamePlans | filter:{fscore:''}"
 									ng-change="matchChange()"></select>
@@ -153,36 +124,16 @@
 									</tr>
 								</thead>
 								<tbody ng-repeat="x in memberResult">
-									<tr ng-init="toggle[$index] = false"
-										ng-click="toggle[$index] = !toggle[$index]">
-										<td width="70%">{{x.fname}}</td>
-										<td width="15%"></td>
-										<td width="15%">{{x.score}}</td>
+									<tr ng-click="viewSpecific()">
+										<td width="80%">{{x.fname}}</td>
+										<td width="20%" ng-repeat="b in x.scores" ng-if="b.matchUri==gamePlan.uri">{{b.score}}</td>
 									</tr>
-									<tr ng-if="toggle[$index]" class="predict">
-										<td width="70%" class="predict">Qst1?</td>
-										<td width="15%" class="predict">Ans1</td>
-										<td width="15%" class="predict">Point1</td>
-									</tr>
-									<tr ng-if="toggle[$index]" class="predict">
-										<td width="70%" class="predict">Qst2?</td>
-										<td width="15%" class="predict">Ans2</td>
-										<td width="15%" class="predict">Point2</td>
-									</tr>
-									<tr ng-if="toggle[$index]" class="predict">
-										<td width="70%" class="predict">Qst3?</td>
-										<td width="15%" class="predict">Ans3</td>
-										<td width="15%" class="predict">Point3</td>
-									</tr>
-									<tr ng-if="toggle[$index]" class="predict">
-										<td width="70%" class="predict">Qst4?</td>
-										<td width="15%" class="predict">Ans4</td>
-										<td width="15%" class="predict">Point4</td>
+									<tr ng-repeat="a in allPredictions | filterData: '/predict/'+x.uri.split('/')[2]: gamePlan.uri : 'predict': 'predict'"">
+										<td width="80%" class="predict">{{a.qz}}</td>
+										<td width="20%" class="predict">{{a.ans}}</td>
 									</tr>
 								</tbody>
 							</table>
-							
-
 
 						</div>
 					</div>
@@ -195,6 +146,14 @@
 							<div class="col-lg-10">
 								<h3 class="panel-title">Total</h3>
 							</div>
+							<div class="col-lg-2">
+								<select class="form-control" ng-model="chart_type" ng-change="changeChartType()">
+									<option>line</option>
+									<option>bar</option>
+									<option>column</option>
+									<option>pie</option>
+								</select>
+							</div>
 						</div>
 						<div class="panel-body">
 							<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -206,100 +165,6 @@
 	</div>
 	<!-- /#wrapper -->
 
-	<script type="text/javascript">
-		jQuery(function($) {
-			var performance = [ 12, 43, 34, 22, 12, 33, 4, 17, 22, 34, 54, 67 ], visits = [
-					123, 323, 443, 32 ], traffic = [ {
-				Source : "Direct",
-				Amount : 323,
-				Change : 53,
-				Percent : 23,
-				Target : 600
-			}, {
-				Source : "Refer",
-				Amount : 345,
-				Change : 34,
-				Percent : 45,
-				Target : 567
-			}, {
-				Source : "Social",
-				Amount : 567,
-				Change : 67,
-				Percent : 23,
-				Target : 456
-			}, {
-				Source : "Search",
-				Amount : 234,
-				Change : 23,
-				Percent : 56,
-				Target : 890
-			}, {
-				Source : "Internal",
-				Amount : 111,
-				Change : 78,
-				Percent : 12,
-				Target : 345
-			} ];
-
-			$("#shieldui-chart1").shieldChart({
-				theme : "dark",
-
-				primaryHeader : {
-					text : "Visitors"
-				},
-				exportOptions : {
-					image : false,
-					print : false
-				},
-				dataSeries : [ {
-					seriesType : "area",
-					collectionAlias : "Q Data",
-					data : performance
-				} ]
-			});
-
-			$("#shieldui-chart2").shieldChart({
-				theme : "dark",
-				primaryHeader : {
-					text : "Traffic Per week"
-				},
-				exportOptions : {
-					image : false,
-					print : false
-				},
-				dataSeries : [ {
-					seriesType : "pie",
-					collectionAlias : "traffic",
-					data : visits
-				} ]
-			});
-
-			$("#shieldui-grid1").shieldGrid({
-				dataSource : {
-					data : traffic
-				},
-				sorting : {
-					multiple : true
-				},
-				rowHover : false,
-				paging : false,
-				columns : [ {
-					field : "Source",
-					width : "170px",
-					title : "Source"
-				}, {
-					field : "Amount",
-					title : "Amount"
-				}, {
-					field : "Percent",
-					title : "Percent",
-					format : "{0} %"
-				}, {
-					field : "Target",
-					title : "Target"
-				}, ]
-			});
-		});
-	</script>
+	
 </body>
 </html>

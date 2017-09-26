@@ -1,0 +1,6 @@
+---
+applications:
+  - name: play-for-fun
+    buildpack: predix_openresty_buildpack
+    memory: 64M
+    stack: cflinuxfs2
