@@ -76,41 +76,11 @@
 				<div class="col-lg-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading col-lg-12">
-							<div class="col-lg-10" ng-if="gamePlan.fscore!=gamePlan.sscore"
-								ng-hide="notStarted">
-								<h3 class="panel-title" ng-if="gamePlan.fscore">
-									<i class="fa fa-trophy"></i>
-									{{gamePlan.fbat}}({{gamePlan.fscore}}/{{gamePlan.ffow}}-{{gamePlan.fover}})
-									vs
-									{{gamePlan.sbat}}({{gamePlan.sscore}}/{{gamePlan.sfow}}-{{gamePlan.sover}})
-									- {{gamePlan.venue}} ({{gamePlan.date}}/6/17)
-								</h3>
-								<h6>{{gamePlan.won}} won by
-									{{gamePlan.fscore>gamePlan.sscore ?
-									(gamePlan.fscore-gamePlan.sscore):10-gamePlan.sfow}}
-									{{gamePlan.fscore>gamePlan.sscore ? 'runs':'wickets'}}, man of
-									the match {{gamePlan.motm}}</h6>
+							<div class="col-lg-10">
+								{{gamePlan.match}}-{{gamePlan.op1.name}} vs {{gamePlan.op2.name}}
 							</div>
-							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore"
-								ng-hide="notStarted">
-								<h3 class="panel-title">
-									<i class="fa fa-trophy"></i>
-									{{gamePlan.fbat}}({{gamePlan.fscore}}/{{gamePlan.ffow}}-{{gamePlan.fover}})
-									vs
-									{{gamePlan.sbat}}({{gamePlan.sscore}}/{{gamePlan.sfow}}-{{gamePlan.sover}})
-									- {{gamePlan.venue}} ({{gamePlan.date}}/6/17)
-								</h3>
-								<h6>Match tied</h6>
-							</div>
-
-							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore"
-								ng-show="notStarted">
-								<h3 class="panel-title">Match is about to start!</h3>
-							</div>
-							<div class="col-lg-2" ng-hide="notStarted">
-								<select class="form-control" ng-model="gamePlan"
-									ng-options="x.match for x in gamePlans | filter:{fscore:''}"
-									ng-change="matchChange()"></select>
+							<div class="col-lg-2">
+								<button ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><</button><button ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match">></button>
 							</div>
 						</div>
 						<div class="panel-body">
@@ -148,14 +118,14 @@
 							<table class="table table-striped">
 								<tbody ng-repeat="x in quizAnsw">
 									<tr>
-										<td width="85%">{{x.qz}}</td>
-										<td width="15%" ng-if="x.multi"><select
+										<td width="80%">{{x.qz}}</td>
+										<td width="20%" ng-if="x.multi"><select data-ng-disabled="gameDrow"
 											class="form-control" ng-model="x.ans">
 												<option>{{gameToPredict.op1}}</option>
 												<option>{{gameToPredict.op2}}</option>
 												<option>Tied</option>
 										</select></td>
-										<td width="15%" ng-if="!x.multi"><input type="number"
+										<td width="20%" ng-if="!x.multi"><input type="number"
 											ng-if="x.uri=='/quiz/q2'" class="form-control"
 											ng-model="x.ans"
 											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
@@ -164,11 +134,12 @@
 											class="form-control" ng-model="x.ans"
 											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
 											maxlength="2"></td>
+									</tr>
 								</tbody>
 								<tbody>
 									<tr>
-										<td width="85%"></td>
-										<td width="15%"><button id="submitBtn"
+										<td width="80%"></td>
+										<td width="20%"><button id="submitBtn"
 												class="btn btn-primary" ng-click="submitPrediction()">Submit</button></td>
 									</tr>
 								</tbody>

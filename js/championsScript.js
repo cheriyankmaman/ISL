@@ -1,6 +1,6 @@
 angular.module('campiansApp', []).controller(
 				'champiansCtrl',
-				function($scope, $window, $http, $q) {
+				function($scope, $window, $http, $q, $filter) {
 					/*
 					 * $scope.profile = { "uri" : "/profile/cheriyan", "fname" :
 					 * "Cheriyan", "lname" : "KM", "groups" : [ "/groups/heros",
@@ -265,7 +265,13 @@ angular.module('campiansApp', []).controller(
 							}
 						};
 						$http(req).then(function(response1) {
-							$scope.gamePlans = response1.data;
+							$scope.gamePlans = $filter('orderBy')(response1.data, 'match', false);
+							$scope.gamePlan = $scope.gamePlans[0];
+							angular.forEach($scope.gamePlans, function(value){
+								if(value.winner != "" && $scope.gamePlan.match<value.match){
+									$scope.gamePlan = value;
+								}
+							});
 							if (response1.data[0].fbat != undefined) {
 								$scope.notStarted = false;
 								var d = $scope.gamePlans[0].date;
@@ -296,6 +302,9 @@ angular.module('campiansApp', []).controller(
 							console.log("game plan: "+ error);
 						});
 					}, function() {});
+				};
+				$scope.getGamePlan = function(value){
+					$scope.gamePlan = $scope.gamePlans[$scope.gamePlan.match+(2*value)]
 				};
 
 					$scope.getQuiz = function() {
