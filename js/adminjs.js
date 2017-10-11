@@ -36,7 +36,7 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 			
 			var req = {
 						method : 'GET',
-						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict',
+						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predicts',
 						headers : {
 							'Authorization' : 'Bearer ' +uaaToken,
 							'Content-Type' : 'application/json',
@@ -45,9 +45,10 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 					};
 			$http(req).then(function(response) {
 				$scope.allPredictions = response.data;
+				console.log(response);
 			},function(error){});
 	},function(error){});
-	
+	/*
 	$scope.updateGame = function(){
 		$scope.contentLoaded = true;
 		$scope.getAccessToken().then(function(uaaToken){
@@ -83,7 +84,8 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 			});
 		},function(){});
 	};
-	
+	*/
+	/*
 	$scope.putScore = function(tempObj, name){
 		$scope.getAccessToken().then(function(uaaToken){
 		var req = {
@@ -97,7 +99,6 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 			};
 			$http(req).then(function(response2) {
 				response2.data[0].scores.push(tempObj);
-				console.log(response2.data);
 				var req = {
 						method : 'PUT',
 						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/score/'+name,
@@ -117,7 +118,7 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 				
 			});
 		},function(){});
-	}
+	}*/
 	
 	$scope.getGamePlans = function() {
 		$scope.getAccessToken().then(function(uaaToken){
@@ -133,6 +134,7 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 		};
 		$http(req).then(function(response1) {
 			$scope.gamePlans = response1.data;
+			console.log(response1.data);
 			var d = $scope.gamePlans[0].date;
 		    $scope.gamePlan = $scope.gamePlans[$scope.gamePlans.length-1];
 		    angular.forEach($scope.gamePlans,function(value){
@@ -143,9 +145,6 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 		    	
 		    });
 		}, function(error) {
-			//console.log(error);
-			// deferred.reject('Error fetching Options' +
-			// error);
 		});
 
 		},function(){});
@@ -212,4 +211,6 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 		}
 		else{}
 	};
+}).filter('makePositive', function() {
+    return function(num) { return Math.abs(num); }
 });

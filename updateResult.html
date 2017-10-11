@@ -107,20 +107,25 @@
 					<table border='1'>
 						<thead>
 							<tr>
-								<th>Name</th>
-								<th>Result/Win team</th>
-								<th>Score</th>
-								<th>Goal Difference</th>
-								<th>Kick off</th>
+								<th rowspan="2">Name</th>
+								<th rowspan="2">Result/Win team</th>
+								<th colspan="2">Score</th>
+								<th rowspan="2">Goal Difference</th>
+								<th rowspan="2">Kick off</th>
+							</tr>
+							<tr>
+								<th	>{{gamePlan.op1.name}}</th>
+								<th	>{{gamePlan.op2.name}}</th>
 							</tr>
 						</thead>
 						<tbody ng-repeat="x in allPredictions">
-							<tr ng-repeat="y in x.predictions" ng-show="y.match==gamePlan.match">
+							<tr ng-repeat="y in x.predictions" ng-show="y.matchUri==gamePlan.uri">
 								<td class="name">{{x.uri.split('/')[2]}}</td>
-								<td>{{y.result.win}}</td>
-								<td>{{y.result.score}}</td>
-								<td>{{y.result.goaldiff}}</td>
-								<td>{{y.result.kickoff}}</td>
+								<td>{{y.opt1.goal>y.opt2.goal?y.opt1.name:(y.opt1.goal==y.opt2.goal?'Drow':y.opt2.name)}}</td>
+								<td>{{y.opt1.goal}}</td>
+								<td>{{y.opt2.goal}}</td>
+								<td>{{y.opt1.goal-y.opt2.goal | makePositive }}</td>
+								<td>{{y.kickoff}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -140,7 +145,7 @@
 				<div class="col-lg-8"></div>
 			</div>
 				<div class="row division" ng-repeat="x in allPredictions">
-					{{x}}
+					
 				</div>
 			</div>
 
