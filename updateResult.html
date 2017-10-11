@@ -76,65 +76,54 @@
 					Match <select class="form-control" ng-model="gamePlan"
 						ng-options="x.match for x in gamePlans" ng-change="matchChange()"></select>
 				</div>
-				<div class="col-lg-2">
-					Team <select class="form-control" ng-model="gamePlan.fbat"
-						ng-change="teamChange1()">
-						<option>{{gamePlan.op1}}</option>
-						<option>{{gamePlan.op2}}</option>
-					</select>
-				</div>
-				<div class="col-lg-2">
-					Score <input class="form-control" type="number"
-						ng-model="gamePlan.fscore" />
-				</div>
-				<div class="col-lg-2">
-					Wickets <input class="form-control" type="number"
-						ng-model="gamePlan.ffow" />
-				</div>
-				<div class="col-lg-2">
-					Man of the match <input class="form-control" type="text"
-						ng-model="gamePlan.motm" />
-				</div>
-				<div class="col-lg-2">
-					Overs <input class="form-control" type="text"
-						ng-model="gamePlan.fover" />
-				</div>
-			</div>
-
-			<div class="row division">
-				<div class="col-lg-2"></div>
-				<div class="col-lg-2">
-					Team <select class="form-control" ng-model="gamePlan.sbat"
-						ng-change="teamChange1()">
-						<option>{{gamePlan.op1}}</option>
-						<option>{{gamePlan.op2}}</option>
-					</select>
-				</div>
-				<div class="col-lg-2">
-					Score <input class="form-control" type="number"
-						ng-model="gamePlan.sscore" />
-				</div>
-				<div class="col-lg-2">
-					Wickets <input class="form-control" type="number"
-						ng-model="gamePlan.sfow" />
-				</div>
-				<div class="col-lg-2"></div>
-				<div class="col-lg-2">
-					Overs <input class="form-control" type="text"
-						ng-model="gamePlan.sover" />
+				<div class="col-lg-4">
+					<div class="col-lg-12">
+						<table>
+							<tbody>
+								<tr>
+									<td>{{gamePlan.op1.name}}</td>
+									<td>vs</td>
+									<td>{{gamePlan.op2.name}}</td>
+								</tr>
+								<tr>
+									<td><input type="number" class="form-control" ng-model="gamePlan.op1.goal"></td>
+									<td></td>
+									<td><input type="number" class="form-control" ng-model="gamePlan.op2.goal"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div class="row division">
 				<div class="col-lg-8"></div>
-				<div class="col-lg-2">
-					Winning Team <select class="form-control" ng-model="gamePlan.won">
-						<option>{{gamePlan.op1}}</option>
-						<option>{{gamePlan.op2}}</option>
-						<option>Tied</option>
-					</select>
-				</div>
+				<div class="col-lg-2"></div>
 				<div class="col-lg-2">
 					<button class="btn btn-primary" ng-click="updateGame()">Update</button>
+				</div>
+			</div>
+			<div class="row division">
+				<div class="col-lg-12">
+					<table border='1'>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Result/Win team</th>
+								<th>Score</th>
+								<th>Goal Difference</th>
+								<th>Kick off</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="x in allPredictions">
+							<tr ng-repeat="y in x.predictions" ng-show="y.match==gamePlan.match">
+								<td class="name">{{x.uri.split('/')[2]}}</td>
+								<td>{{y.result.win}}</td>
+								<td>{{y.result.score}}</td>
+								<td>{{y.result.goaldiff}}</td>
+								<td>{{y.result.kickoff}}</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 			<div class="row division">
@@ -150,22 +139,8 @@
 				</div>
 				<div class="col-lg-8"></div>
 			</div>
-			<div class="row division" ng-repeat="x in allPredictions">
-				<div class="col-lg-12"
-					ng-repeat="a in x.predict | filter : gamePlan.uri">
-					<div class="col-lg-2"
-						style="color: white; font-style: bold; font-size: x-large; font-weight: 700;">
-						{{x.uri.split("/")[2]}}</div>
-
-					<div class="col-lg-10" ng-repeat="b in a.predict">
-						<div class="col-lg-2" ng-if="$index!=0"></div>
-						<div class="col-lg-10">
-							<div class="col-lg-10" style="color: #ff6d6d">{{b.qz}}</div>
-
-							<div class="col-lg-2" style="color: #2eff2e">{{b.ans}}</div>
-						</div>
-					</div>
-					<hr>
+				<div class="row division" ng-repeat="x in allPredictions">
+					{{x}}
 				</div>
 			</div>
 

@@ -74,51 +74,12 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 						}
 					};
 					$http(req).then(function(response1) {
-						angular.forEach(response1.data, function(value){
-							$scope.score=0;
-							angular.forEach(value.predict, function(value1){
-								if(value1.matchUri==$scope.gamePlan.uri){
-									angular.forEach(value1.predict, function(value2){
-										if(value2.uri=="/quiz/q1"){
-											$scope.win = $scope.gamePlan.won;
-											if(value2.ans==$scope.win){
-												$scope.score=$scope.score+10;
-											}
-										}
-										if(value2.uri=="/quiz/q2"){
-											if(value2.ans>$scope.gamePlan.fscore){
-												$scope.score=$scope.score+Math.round(((((2*$scope.gamePlan.fscore)-value2.ans)/$scope.gamePlan.fscore))*1000)/100;
-											}
-											else{
-												$scope.score=$scope.score+Math.round((value2.ans/$scope.gamePlan.fscore)*1000)/100;
-											}
-										}
-										if(value2.uri=="/quiz/q3"){
-											$scope.score = $scope.score + (10-Math.abs($scope.gamePlan.ffow-value2.ans));
-										}
-										if(value2.uri=="/quiz/q4"){
-											$scope.score = $scope.score + (10-Math.abs($scope.gamePlan.sfow-value2.ans));
-										}
-									});
-									$scope.score = Math.round($scope.score*100)/100;
-									console.log("score:"+$scope.score);
-									$scope.tempScoreObj={};
-									$scope.tempScoreObj={"matchUri":$scope.gamePlan.uri,"score":$scope.score};
-									var name = value.uri.split("/");
-									console.log("name:"+name[2]);
-									$scope.putScore($scope.tempScoreObj,name[2]);
-								}
-							});
-						});
+						
 					}, function(error1) {
-						//console.log(error);
-						// deferred.reject('Error fetching Options' +
-						// error);
+						
 					});
 			}, function(error) {
-				//console.log(error);
-				// deferred.reject('Error fetching Options' +
-				// error);
+				
 			});
 		},function(){});
 	};
