@@ -10,8 +10,10 @@ angular.module('campiansApp', []).controller(
 					
 					$scope.chart_type='column';
 					$scope.option_3d={};
-					$scope.opt={enabled: true,format: '{point.y:.1f}'};
 					$scope.contentLoaded=true;
+					$scope.tab1 = true;
+					$scope.tab2 = false;
+					$scope.myPrediction={"matchUri":"","opt1":{"name":"","goal":0},"opt2":{"name":"","goal":0},"kickoff":""};
 					/*$scope.groups = [
 							{
 								"uri" : "/groups/heros",
@@ -51,7 +53,9 @@ angular.module('campiansApp', []).controller(
 						
 					};
 					$scope.selectKickOff = function(teamName){
-						
+						$scope.myPrediction.kickoff = teamName;
+						$scope.tab1 = false;
+						$scope.tab2 = true;
 					};
 					$scope.initGroupPage = function(value) {
 						$scope.teamImage = {
@@ -124,6 +128,12 @@ angular.module('campiansApp', []).controller(
 						return deferred.promise;
 					};
 
+					$scope.predict = function(){
+						$scope.myPrediction.matchUri = $scope.gameToPredict.uri;
+						$scope.myPrediction.opt1.name = $scope.gameToPredict.opt1.name;
+						$scope.myPrediction.opt2.name = $scope.gameToPredict.opt2.name;
+						console.log($scope.myPrediction);
+					};
 					
 					$scope.allGroups=[];
 					$scope.getProfile = function() {

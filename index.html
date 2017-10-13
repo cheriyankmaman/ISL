@@ -114,13 +114,31 @@
 							</h3>
 						</div>
 						<div class="panel-body">
-							<div class="col-lg-12 titles quiz-title">Kickoff</div>
-							<div class="col-lg-12">
-								<div class="col-lg-6 titles quiz-panel">
-									<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png" width="90" height="142">
+							<div class="col-lg-12" ng-show="tab1">
+								<div class="col-lg-12 titles quiz-title">Kickoff</div>
+								<div class="col-lg-12">
+									<div class="col-lg-6 titles quiz-panel">
+										<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png">
+									</div>
+									<div class="col-lg-6 titles quiz-panel">
+										<img ng-click="selectKickOff(gameToPredict.opt2.name)" class="mouse-point" alt="{{gameToPredict.opt2.name}}" src="images/{{teamImage[gameToPredict.opt2.name]}}.png">
+									</div>
 								</div>
-								<div class="col-lg-6 titles quiz-panel">
-									<img ng-click="selectKickOff(gameToPredict.opt2.name)" class="mouse-point" alt="{{gameToPredict.opt2.name}}" src="images/{{teamImage[gameToPredict.opt2.name]}}.png" width="90" height="142">
+							</div>{{allPredictions}}
+							<div class="col-lg-12" ng-show="tab2">
+								<div class="col-lg-12 titles quiz-title">Score</div>
+								<div class="col-lg-12">
+									<div class="col-lg-6 titles quiz-panel">
+										<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png">
+										<input type="number" class="form-control" ng-model="myPrediction.opt1.goal">
+									</div>
+									<div class="col-lg-6 titles quiz-panel">
+										<img ng-click="selectKickOff(gameToPredict.opt2.name)" class="mouse-point" alt="{{gameToPredict.opt2.name}}" src="images/{{teamImage[gameToPredict.opt2.name]}}.png">
+										<input type="number" class="form-control" ng-model="myPrediction.opt2.goal">
+									</div>
+								</div>
+								<div class="col-lg-12">
+									<input type="button" value="Submit" ng-click="predict()">
 								</div>
 							</div>
 						</div>
