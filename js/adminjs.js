@@ -33,7 +33,7 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 	};
 	
 	$scope.getAccessToken().then(function(uaaToken){
-			
+		$scope.contentLoaded = true;
 			var req = {
 						method : 'GET',
 						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predicts',
@@ -45,10 +45,22 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 					};
 			$http(req).then(function(response) {
 				$scope.allPredictions = response.data;
-				console.log(response);
+				var req1 = {
+						method : 'GET',
+						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/score',
+						headers : {
+							'Authorization' : 'Bearer ' +uaaToken,
+							'Content-Type' : 'application/json',
+							'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+						}
+					};
+				$http(req1).then(function(response1) {
+					$scope.scores=response1.data;
+					$scope.contentLoaded = false;
+				},function(error){});
 			},function(error){});
 	},function(error){});
-	/*
+	
 	$scope.updateGame = function(){
 		$scope.contentLoaded = true;
 		$scope.getAccessToken().then(function(uaaToken){
@@ -64,19 +76,56 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 				data : $scope.gamePlan
 			};
 			$http(req).then(function(response) {
-				// do the logics.
+				//updating result
+				angular.forEach($scope.allPredictions, function(value){
+					$scope.individualScore=0;
+					$scope.scoreInserted = false;
+					angular.forEach(value.predictions, function(value1){
+						if(value1.matchUri == $scope.gamePlan.uri){
+							if(angular.equals(value1.opt1,$scope.gamePlan.opt1) && 
+									angular.equals(value1.opt2,$scope.gamePlan.opt2)){
+								$scope.individualScore = $scope.individualScore + 5;
+							}
+							else{
+								$scope.individualScore = $scope.individualScore - 3;
+							}
+							if(Math.abs(value1.opt1.goal-value1.opt2.goal) == 
+								Math.abs($scope.gamePlan.opt1.goal-$scope.gamePlan.opt2.goal)){
+								$scope.individualScore = $scope.individualScore + 3;
+							}
+							if(value1.kickoff == $scope.gamePlan.kickoff){
+								$scope.individualScore = $scope.individualScore + 3;
+							}
+							angular.forEach($scope.scores, function(value2){
+								angular.forEach(value2.scores, function(value3){
+									if(value2.uri.split('/')[2] == value.uri.split('/')[2] &&
+											value3.matchUri == $scope.gamePlan.uri){
+										value3.score = $scope.individualScore;
+										$scope.scoreInserted = true;
+									}
+								});
+								if($scope.scoreInserted == false && 
+										value2.uri.split('/')[2] == value.uri.split('/')[2]){
+									value2.scores.push({"matchUri":$scope.gamePlan.uri,"score":$scope.individualScore});
+								}
+							});
+						}
+					});
+				});
 				var req = {
-						method : 'GET',
-						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict',
+						method : 'POST',
+						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/score',
 						headers : {
 							'Authorization' : 'Bearer ' +uaaToken,
 							'Content-Type' : 'application/json',
 							'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-						}
+						},
+						data : $scope.scores
 					};
-					$http(req).then(function(response1) {
-						
-					}, function(error1) {
+					$http(req).then(function(response) {
+						console.log("score added");
+						$scope.contentLoaded=false;
+					}, function(error) {
 						
 					});
 			}, function(error) {
@@ -84,7 +133,7 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 			});
 		},function(){});
 	};
-	*/
+	
 	/*
 	$scope.putScore = function(tempObj, name){
 		$scope.getAccessToken().then(function(uaaToken){
@@ -134,7 +183,6 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 		};
 		$http(req).then(function(response1) {
 			$scope.gamePlans = response1.data;
-			console.log(response1.data);
 			var d = $scope.gamePlans[0].date;
 		    $scope.gamePlan = $scope.gamePlans[$scope.gamePlans.length-1];
 		    angular.forEach($scope.gamePlans,function(value){

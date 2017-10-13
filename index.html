@@ -77,7 +77,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading col-lg-12">
 							<div class="col-lg-10">
-								{{gamePlan.match}}-{{gamePlan.op1.name}} vs {{gamePlan.op2.name}}
+								<i class="fa fa-futbol-o" aria-hidden="true"></i> {{gamePlan.opt1.name}} vs {{gamePlan.opt2.name}}
 							</div>
 							<div class="col-lg-2">
 								<button ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><</button><button ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match">></button>
@@ -110,40 +110,15 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">
-								<i class="fa fa-bar-chart-o"></i> {{gameToPredict.op1}} vs
-								{{gameToPredict.op2}} - {{gameToPredict.venue}}
+								<i class="fa fa-lightbulb-o" aria-hidden="true"></i> Predict here !!
 							</h3>
 						</div>
 						<div class="panel-body">
-							<table class="table table-striped">
-								<tbody ng-repeat="x in quizAnsw">
-									<tr>
-										<td width="80%">{{x.qz}}</td>
-										<td width="20%" ng-if="x.multi"><select data-ng-disabled="gameDrow"
-											class="form-control" ng-model="x.ans">
-												<option>{{gameToPredict.op1}}</option>
-												<option>{{gameToPredict.op2}}</option>
-												<option>Tied</option>
-										</select></td>
-										<td width="20%" ng-if="!x.multi"><input type="number"
-											ng-if="x.uri=='/quiz/q2'" class="form-control"
-											ng-model="x.ans"
-											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-											maxlength="3"> <input type="number"
-											ng-if="x.uri=='/quiz/q3' || x.uri=='/quiz/q4'"
-											class="form-control" ng-model="x.ans"
-											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-											maxlength="2"></td>
-									</tr>
-								</tbody>
-								<tbody>
-									<tr>
-										<td width="80%"></td>
-										<td width="20%"><button id="submitBtn"
-												class="btn btn-primary" ng-click="submitPrediction()">Submit</button></td>
-									</tr>
-								</tbody>
-							</table>
+							<div class="col-lg-12 titles quiz-title">Kickoff</div>
+							<div class="col-lg-12 titles">
+								<div class="col-lg-6">a</div>
+								<div class="col-lg-6">b</div>
+							</div>
 						</div>
 						<!-- gameToPredict:{{gameToPredict}}<br>
 						quizAnsw:{{quizAnsw}}<br>
