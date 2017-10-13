@@ -50,9 +50,22 @@ angular.module('campiansApp', []).controller(
 					$scope.createChartDatas = function(){
 						
 					};
-					
+					$scope.selectKickOff = function(teamName){
+						
+					};
 					$scope.initGroupPage = function(value) {
-
+						$scope.teamImage = {
+								"ATK":"Atletico_Kolkata_FC",
+								"KERALA BLASTERS FC":"Kerala_Blasters_FC	",
+								"NORTHEAST UNITED FC":"NorthEast_United_FC",
+								"JAMSHEDPUR FC":"Jamshedpur_FC",
+								"CHENNAIYIN FC":"Chennaiyin_FC",
+								"FC GOA":"FC_Goa",
+								"BENGALURU FC":"Bengaluru_FC",
+								"MUMBAI CITY FC":"Mumbai_City_FC",
+								"FC PUNE CITY":"FC_Pune_City",
+								"DELHI DYNAMOS FC":"Delhi_Dynamos"
+						}
 						if(value=="index"){
 							localStorage.setItem("group", '');
 							localStorage.setItem("groupIndex", undefined);
@@ -270,33 +283,10 @@ angular.module('campiansApp', []).controller(
 							angular.forEach($scope.gamePlans, function(value){
 								if(value.winner != "" && $scope.gamePlan.match<value.match){
 									$scope.gamePlan = value;
+									if($scope.gamePlans.indexOf(value)!=$scope.gamePlans.length)
+										$scope.gameToPredict = $scope.gamePlans[$scope.gamePlans.indexOf(value)+1];
 								}
 							});
-							if (response1.data[0].fbat != undefined) {
-								$scope.notStarted = false;
-								var d = $scope.gamePlans[0].date;
-								$scope.gamePlan = $scope.gamePlans[0];
-								$scope.gameToPredict = null;
-								angular.forEach($scope.gamePlans,function(value,index) {
-									if ($scope.gamePlan.date <= value.date && value.fscore != undefined) {
-										d = value.date;
-										$scope.gamePlan = value;
-									}
-									if (value.fscore == undefined) {
-										if($scope.gamePlan.date < value.date && $scope.gameToPredict == null){
-											$scope.gameToPredict = value;
-										}
-									}
-								});
-							} else {3
-							
-								angular.forEach(response1.data,function(value,index) {
-									if (value.date == 1) {
-										$scope.gameToPredict = value;
-									}
-								});
-								$scope.notStarted = true;
-							}
 						},
 						function(error) {
 							console.log("game plan: "+ error);

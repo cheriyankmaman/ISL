@@ -115,9 +115,13 @@
 						</div>
 						<div class="panel-body">
 							<div class="col-lg-12 titles quiz-title">Kickoff</div>
-							<div class="col-lg-12 titles">
-								<div class="col-lg-6">a</div>
-								<div class="col-lg-6">b</div>
+							<div class="col-lg-12">
+								<div class="col-lg-6 titles quiz-panel">
+									<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png" width="90" height="142">
+								</div>
+								<div class="col-lg-6 titles quiz-panel">
+									<img ng-click="selectKickOff(gameToPredict.opt2.name)" class="mouse-point" alt="{{gameToPredict.opt2.name}}" src="images/{{teamImage[gameToPredict.opt2.name]}}.png" width="90" height="142">
+								</div>
 							</div>
 						</div>
 						<!-- gameToPredict:{{gameToPredict}}<br>

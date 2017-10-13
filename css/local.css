@@ -772,6 +772,9 @@ pre code {
 .quiz-title{
 	font-size: 3em;
 }
+.mouse-point{
+	cursor: pointer;
+}
 
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2,
 	.col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
@@ -6856,7 +6859,12 @@ table.tablesorter thead tr th:hover {
 		right: auto;
 	}
 }
-
+@media ( max-width : 1200px) {
+	.quiz-panel{
+		width: 50%;
+		float: left;
+	}
+}
 .higjlights {
 	margin-top: 30px;
 }
