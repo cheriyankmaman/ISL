@@ -107,6 +107,27 @@ angular.module('campiansApp', []).controller(
 						});
 						return $scope.score;
 					};
+					
+					$scope.opt1plus = function(){
+						if($scope.myPrediction.opt1.goal<20){
+							$scope.myPrediction.opt1.goal++;
+						}
+					};
+					$scope.opt1minus = function(){
+						if($scope.myPrediction.opt1.goal>0){
+							$scope.myPrediction.opt1.goal--;
+						}
+					};
+					$scope.opt2plus = function(){
+						if($scope.myPrediction.opt2.goal<20){
+							$scope.myPrediction.opt2.goal++;
+						}
+					};
+					$scope.opt2minus = function(){
+						if($scope.myPrediction.opt2.goal>0){
+							$scope.myPrediction.opt2.goal--;
+						}
+					};
 
 					$scope.getAccessToken = function() {
 						var deferred = $q.defer();
@@ -132,7 +153,7 @@ angular.module('campiansApp', []).controller(
 						$scope.myPrediction.matchUri = $scope.gameToPredict.uri;
 						$scope.myPrediction.opt1.name = $scope.gameToPredict.opt1.name;
 						$scope.myPrediction.opt2.name = $scope.gameToPredict.opt2.name;
-						console.log($scope.myPrediction);
+						console.log(JSON.stringify($scope.myPrediction));
 					};
 					
 					$scope.allGroups=[];
