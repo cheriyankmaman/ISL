@@ -6922,6 +6922,7 @@ td input.form-control,td select.form-control{
     position: fixed;
     z-index: 99999;
     top: 0px;
+    left: 0px;
 }
 .predict {
 	background-color: #181818 !important;
@@ -6959,4 +6960,21 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .plus-btn{
 	background-color: green;
+	border: 1px solid green;
+    border-radius: 9px 9px 0px 0px;
+    padding: 4px 17px 3px 17px;
+    outline: none;
+}
+.minus-btn{
+	background-color: red;
+	border: 1px solid red;
+    border-radius: 0px 0px 9px 9px;
+    padding: 4px 17px 3px 17px;
+    outline: none;
+}
+.plus-btn:active{
+	background-color: #004200;
+}
+.minus-btn:active{
+	background-color: #9d0000;
 }

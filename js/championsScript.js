@@ -154,6 +154,46 @@ angular.module('campiansApp', []).controller(
 						$scope.myPrediction.opt1.name = $scope.gameToPredict.opt1.name;
 						$scope.myPrediction.opt2.name = $scope.gameToPredict.opt2.name;
 						console.log(JSON.stringify($scope.myPrediction));
+						$scope.getAccessToken().then(function(uaaToken) {
+							
+							var req = {
+							method : 'GET',
+							url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
+							headers : {
+								'Authorization' : 'Bearer '+ uaaToken,
+								'Content-Type' : 'application/json',
+								'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+									}
+							};
+							$http(req).then(function(response) {
+								$scope.predictionObject = response.data;
+								$scope.predictionObject[0].predictions.push($scope.myPrediction);
+								angular.forEach($scope.predictionObject[0].predictions, function(value){
+									if(value.matchUri == $scope.myPrediction.matchUri){
+										$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
+									}
+								});
+								var req = {
+									method : 'PUT',
+									url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
+									headers : {
+										'Authorization' : 'Bearer '+ uaaToken,
+										'Content-Type' : 'application/json',
+										'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+											},
+									data:response.data
+									};
+									$http(req).then(function(response) {
+										console.log("predicted!");
+									},function(error){
+										console.log("error in add prediction");
+									});
+							},function(error){
+								console.log("error in get prdictions");
+							});
+						},function(error){
+							
+						});
 					};
 					
 					$scope.allGroups=[];
@@ -249,46 +289,26 @@ angular.module('campiansApp', []).controller(
 													$scope.highName=value.name;
 												}
 											});
+											var req = {
+													method : 'GET',
+													url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict',
+													headers : {
+														'Authorization' : 'Bearer '+ uaaToken,
+														'Content-Type' : 'application/json',
+														'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+													}
+												};
+												$http(req).then(function(response5) {
+													$scope.allPredictions = response5.data;
+													$scope.createChartDatas();
+													$scope.contentLoaded = false;
+												},
+												function(error) {
+													console.log("get score: "+ error);
+												});
 										},function(error) {
 											console.log("get score: "+ error);
 											});
-									
-									var req = {
-											method : 'GET',
-											url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict',
-											headers : {
-												'Authorization' : 'Bearer '+ uaaToken,
-												'Content-Type' : 'application/json',
-												'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-											}
-										};
-										$http(req).then(function(response5) {
-											$scope.allPredictions = response5.data;
-										},
-										function(error) {
-											console.log("get score: "+ error);
-										});
-									
-								angular.forEach(response1.data[0].groups, function(value){
-									var req = {
-										method : 'GET',
-										url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+value,
-										headers : {
-											'Authorization' : 'Bearer '+ uaaToken,
-											'Content-Type' : 'application/json',
-											'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-										}
-									};
-									$http(req).then(function(response) {
-										$scope.allGroups.push(response.data[0]);
-										$scope.createChartDatas();
-										$scope.contentLoaded = false;
-									},
-									function(error) {
-										console.log("get score: "+ error);
-									});
-
-								});
 							},function(error) {
 								console.log("get profile: "+ error);
 							});
