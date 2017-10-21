@@ -43,15 +43,14 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">Champions</a>
+				<a class="navbar-brand" href="index.html">ISL-stars</a>
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul id="active" class="nav navbar-nav side-nav">
 					<li ng-click="changeGroup(-1,{})" ng-class="dash"><a href="index.html"><i class="fa fa-bullseye"></i>
 							Dashboard</a></li>
-					<li ng-class="select[$index]" ng-repeat="x in allGroups"
-						ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
-							class="fa fa-tasks"></i> {{x.name}}</a></li>
+					<li ng-class="select[$index]" ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
+							class="fa fa-tasks"></i> Details</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right navbar-user">
 					
@@ -79,39 +78,11 @@
 				<div class="col-lg-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading col-lg-12">
-							<div class="col-lg-10" ng-if="gamePlan.fscore!=gamePlan.sscore" ng-hide="notStarted">
-								<h3 class="panel-title" ng-if="gamePlan.fscore">
-									<i class="fa fa-trophy"></i>
-									{{gamePlan.fbat}}({{gamePlan.fscore}}/{{gamePlan.ffow}}-{{gamePlan.fover}})
-									vs
-									{{gamePlan.sbat}}({{gamePlan.sscore}}/{{gamePlan.sfow}}-{{gamePlan.sover}})
-									- {{gamePlan.venue}} ({{gamePlan.date}}/6/17)
-								</h3>
-								<h6>{{gamePlan.fscore>gamePlan.sscore ?
-									gamePlan.fbat:gamePlan.sbat}} won by
-									{{gamePlan.fscore>gamePlan.sscore ?
-									(gamePlan.fscore-gamePlan.sscore):10-gamePlan.sfow}}
-									{{gamePlan.fscore>gamePlan.sscore ? 'runs':'wickets'}}, man of
-									the match {{gamePlan.motm}}</h6>
+							<div class="col-lg-10">
+								<i class="fa fa-futbol-o" aria-hidden="true"></i> {{gamePlan.opt1.name}} vs {{gamePlan.opt2.name}}
 							</div>
-							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore" ng-hide="notStarted">
-								<h3 class="panel-title">
-									<i class="fa fa-trophy"></i>
-									{{gamePlan.fbat}}({{gamePlan.fscore}}/{{gamePlan.ffow}}-{{gamePlan.fover}})
-									vs
-									{{gamePlan.sbat}}({{gamePlan.sscore}}/{{gamePlan.sfow}}-{{gamePlan.sover}})
-									- {{gamePlan.venue}} ({{gamePlan.date}}/6/17)
-								</h3>
-								<h6>Match tied</h6>
-							</div>
-							
-							<div class="col-lg-10" ng-if="gamePlan.fscore==gamePlan.sscore" ng-show="notStarted">
-								<h3 class="panel-title">Match is about to start!</h3>
-							</div>
-							<div class="col-lg-2" ng-hide="notStarted">
-								<select class="form-control" ng-model="gamePlan"
-									ng-options="x.match for x in gamePlans | filter:{fscore:''}"
-									ng-change="matchChange()"></select>
+							<div class="col-lg-2">
+								<button ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><</button><button ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match">></button>
 							</div>
 						</div>
 						<div class="panel-body">
@@ -134,7 +105,7 @@
 									</tr>
 								</tbody>
 							</table>
-
+{{allPredictions}}::{{memberResult}}
 						</div>
 					</div>
 				</div>

@@ -14,26 +14,14 @@ angular.module('campiansApp', []).controller(
 					$scope.tab1 = true;
 					$scope.tab2 = false;
 					$scope.myPrediction={"matchUri":"","opt1":{"name":"","goal":0},"opt2":{"name":"","goal":0},"kickoff":""};
-					/*$scope.groups = [
-							{
-								"uri" : "/groups/heros",
-								"name" : "Heros",
-								"members" : [ "/profile/cheriyan",
-										"/profile/arjun" ]
-							},
-							{
-								"uri" : "/groups/batch13",
-								"name" : "Batch '13",
-								"members" : [ "/profile/cheriyan",
-										"/profile/hari", "/profile/bibin" ]
-							} ];*/
+					
 					$scope.memberResult = [];
 					$scope.gamePlans = [];
 					$scope.quizAnsw = [];
-					;
 					$scope.chartTitle = "Point Table";
 
 					$scope.mobNoOfUser = localStorage.getItem("user");
+
 					$scope.matchChange = function() {
 
 					};
@@ -77,7 +65,7 @@ angular.module('campiansApp', []).controller(
 							$scope.select=[];
 						}
 						else{
-							$scope.group = JSON.parse(localStorage.getItem("group"));
+							//$scope.group = JSON.parse(localStorage.getItem("group"));
 							$scope.groupIndex = localStorage.getItem("groupIndex");
 							$scope.select = [];
 							for (var i = 0; i <= $scope.groupIndex; i++) {
@@ -167,12 +155,12 @@ angular.module('campiansApp', []).controller(
 							};
 							$http(req).then(function(response) {
 								$scope.predictionObject = response.data;
-								$scope.predictionObject[0].predictions.push($scope.myPrediction);
 								angular.forEach($scope.predictionObject[0].predictions, function(value){
 									if(value.matchUri == $scope.myPrediction.matchUri){
 										$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
 									}
 								});
+								$scope.predictionObject[0].predictions.push($scope.myPrediction);
 								var req = {
 									method : 'PUT',
 									url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
@@ -181,7 +169,7 @@ angular.module('campiansApp', []).controller(
 										'Content-Type' : 'application/json',
 										'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
 											},
-									data:response.data
+									data:$scope.predictionObject[0]
 									};
 									$http(req).then(function(response) {
 										console.log("predicted!");
@@ -268,7 +256,7 @@ angular.module('campiansApp', []).controller(
 											$scope.completeData = {name: 'Member',colorByPoint: true,data:$scope.data};
 											$scope.completeDataArray.push($scope.completeData);
 											$scope.drilldownObj = {series:$scope.drillSeriesArray};
-											$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
+											//$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
 											
 											/*End of chart generation*/
 											
@@ -331,6 +319,7 @@ angular.module('campiansApp', []).controller(
 						$http(req).then(function(response1) {
 							$scope.gamePlans = $filter('orderBy')(response1.data, 'match', false);
 							$scope.gamePlan = $scope.gamePlans[0];
+							$scope.gameToPredict = $scope.gamePlans[0];
 							angular.forEach($scope.gamePlans, function(value){
 								if(value.winner != "" && $scope.gamePlan.match<value.match){
 									$scope.gamePlan = value;
@@ -347,127 +336,21 @@ angular.module('campiansApp', []).controller(
 				$scope.getGamePlan = function(value){
 					$scope.gamePlan = $scope.gamePlans[$scope.gamePlan.match+(2*value)]
 				};
-
-					$scope.getQuiz = function() {
-						$scope.getAccessToken().then(function(uaaToken) {
-							var req = {
-									method : 'GET',
-									url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/quiz',
-									headers : {
-										'Authorization' : 'Bearer '+ uaaToken,
-										'Content-Type' : 'application/json',
-										'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-									}
-								};
-								$http(req).then(function(response1) {
-									$scope.quizAnsw = response1.data;
-								},
-								function(error) {
-									console.log("get score: "+ error);
-								});
-							}, function() {});
-					};
-
-					
-					$scope.submitPrediction = function() {
-						$scope.submitPopUp = true;
-						// send to asset
-						$scope.getAccessToken().then(function(uaaToken) {
-							var req = {
-							method : 'GET',
-							url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/active/me',
-							headers : {
-								'Authorization' : 'Bearer '+ uaaToken,
-								'Content-Type' : 'application/json',
-								'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-									}
-							};
-							$http(req).then(function(response1) {
-								$scope.active = response1.data[0].status;
-								if(response1.data[0].status=="true"){
-									$scope.yesitissend = true;
-									angular.forEach($scope.quizAnsw, function(value) {
-										if (value.ans == '' || value.ans == null) {
-											$scope.yesitissend = false;
-										}
-									});
-									if ($scope.yesitissend == true) {
-										
-										$scope.getAccessToken().then(function(uaaToken) {
-											var name = $scope.profile[0].uri;
-											var nameArray = name.split("/");
-											var req = {
-											method : 'GET',
-											url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+nameArray[2],
-											headers : {
-												'Authorization' : 'Bearer '+ uaaToken,
-												'Content-Type' : 'application/json',
-												'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-												}
-											};
-											$http(req).then(function(response) {
-												$scope.predictedOrNot=false;
-												angular.forEach(response.data[0].predict, function(value){
-													if(value.matchUri==$scope.gameToPredict.uri){
-														$scope.predictedOrNot=true;
-													}
-												});
-												if($scope.predictedOrNot==false){
-												$scope.predictObj={"matchUri" : $scope.gameToPredict.uri,"predict":$scope.quizAnsw};
-												//response.data.predict.push($scope.predictObj);
-												response.data[0].predict.push($scope.predictObj);
-												var req = {
-														method : 'PUT',
-														url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+nameArray[2],
-														headers : {
-															'Authorization' : 'Bearer '+ uaaToken,
-															'Content-Type' : 'application/json',
-															'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-															},
-														data:response.data
-														};
-														$http(req).then(function(response1) {
-															
-														},function(error) {
-															console.log("get profile: "+ error);
-														});
-														alert("Thank you! Enjoy the match");
-												}
-												else{
-													alert("You have already predicted!");
-												}
-											},function(error) {
-												console.log("get profile: "+ error);
-											});
-										}, function() {});
-									} else {
-										alert("Please fill all the fields!");
-									}
-									}
-									else{
-										alert("Time up :-(");
-									}
-							},function(error){});
-						},function(error){});
-						
-					};
-					
-					$scope.changeChartType = function(){
-						if($scope.chart_type=='pie'){
-							$scope.option_3d={enabled: true,alpha: 45};
-							$scope.opt={enabled : true,format : '{point.name}:{point.y:.1f}'};
-						}
-						else{
-							$scope.option_3d={};
-							$scope.opt={enabled: true,format: '{point.y:.1f}'};
-						}
-						$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
-					};
+				/*$scope.changeChartType = function(){
+					if($scope.chart_type=='pie'){
+						$scope.option_3d={enabled: true,alpha: 45};
+						$scope.opt={enabled : true,format : '{point.name}:{point.y:.1f}'};
+					}
+					else{
+						$scope.option_3d={};
+						$scope.opt={enabled: true,format: '{point.y:.1f}'};
+					}
+					$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
+				};*/
 					
 					$scope.getGamePlans();
 					$scope.getProfile();
 					//$scope.getScores();
-					$scope.getQuiz();
 
 					$scope.logout = function() {
 						if (typeof (Storage) !== "undefined") {
@@ -478,7 +361,7 @@ angular.module('campiansApp', []).controller(
 					};
 					
 
-					$scope.getChart = function(data1,data2,type){
+					/*$scope.getChart = function(data1,data2,type){
 					$(function() {
 						$('#container')
 								.highcharts(
@@ -525,7 +408,7 @@ angular.module('campiansApp', []).controller(
 											drilldown : data2
 										});
 					});
-					};
+					};*/
 				}).filter('filterData', function(){
 					  return function(data, uri, muri, firstParam, secondParam){
 						    var returnData = [];

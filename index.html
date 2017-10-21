@@ -46,8 +46,8 @@
 				<ul id="active" class="nav navbar-nav side-nav">
 					<li ng-click="changeGroup(-1,{})" ng-class="dash"><a
 						href="index.html"><i class="fa fa-bullseye"></i> Dashboard</a></li>
-					<li ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
-							class="fa fa-tasks"></i> {{x.name}}</a></li>
+					<li ng-class="select[$index]" ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
+							class="fa fa-tasks"></i> Details</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right navbar-user">
 
