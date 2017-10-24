@@ -22,6 +22,7 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 	};
 	
 	$scope.registerToApp = function(){
+		$scope.alreadyRegistered = false;
 		$scope.contentLoaded = true;
 		$scope.profile.uri="/profile/"+$scope.profile.mob;
 		$scope.emptyArray=[];
@@ -39,56 +40,78 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 		$scope.predict.predictions = $scope.emptyArray;
 		
 		$scope.getAccessToken().then(function(uaaToken) {
-			
 			var req = {
-			method : 'PUT',
-			url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.profile.uri,
-			headers : {
-				'Authorization' : 'Bearer '+ uaaToken,
-				'Content-Type' : 'application/json',
-				'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-					},
-			data:$scope.profile
-			};
+					method : 'GET',
+					url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/profile',
+					headers : {
+						'Authorization' : 'Bearer '+ uaaToken,
+						'Content-Type' : 'application/json',
+						'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+							}
+					};
 			$http(req).then(function(response) {
-						var req = {
-							method : 'PUT',
-							url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.score.uri,
-							headers : {
-								'Authorization' : 'Bearer '+ uaaToken,
-								'Content-Type' : 'application/json',
-								'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-									},
-							data:$scope.score
-						};
-						$http(req).then(function(response) {
-							var req = {
-									method : 'PUT',
-									url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.predict.uri,
-									headers : {
-										'Authorization' : 'Bearer '+ uaaToken,
-										'Content-Type' : 'application/json',
-										'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-											},
-									data:$scope.predict
-								};
-								$http(req).then(function(response) {
-									$scope.contentLoaded = false;
-									$window.location.href = 'login.html';
-								},function(error){ 
-									console.log("Error in registration3:"+JSON.stringify(error));
-								});
-						},function(error){ 
-							console.log("Error in registration2:"+JSON.stringify(error));
-						});
-			},function(error){ 
-				console.log("Error in registration1:"+JSON.stringify(error));
+				angular.forEach(response.data, function(value){
+					if(value.mob==$scope.profile.mob){
+						$scope.alreadyRegistered = true;
+					}
+				});
+			},function(error){
+				
 			});
+			if($scope.alreadyRegistered){
+				var req = {
+				method : 'PUT',
+				url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.profile.uri,
+				headers : {
+					'Authorization' : 'Bearer '+ uaaToken,
+					'Content-Type' : 'application/json',
+					'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+						},
+				data:$scope.profile
+				};
+				$http(req).then(function(response) {
+							var req = {
+								method : 'PUT',
+								url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.score.uri,
+								headers : {
+									'Authorization' : 'Bearer '+ uaaToken,
+									'Content-Type' : 'application/json',
+									'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+										},
+								data:$scope.score
+							};
+							$http(req).then(function(response) {
+								var req = {
+										method : 'PUT',
+										url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.predict.uri,
+										headers : {
+											'Authorization' : 'Bearer '+ uaaToken,
+											'Content-Type' : 'application/json',
+											'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+												},
+										data:$scope.predict
+									};
+									$http(req).then(function(response) {
+										$scope.contentLoaded = false;
+										$window.location.href = 'login.html';
+									},function(error){ 
+										console.log("Error in registration3:"+JSON.stringify(error));
+									});
+							},function(error){ 
+								console.log("Error in registration2:"+JSON.stringify(error));
+							});
+				},function(error){ 
+					console.log("Error in registration1:"+JSON.stringify(error));
+				});
+			}
+			else{
+				alert("Already registered!!");
+				$scope.contentLoaded = false;
+				$window.location.href = 'login.html';
+			}
 		},function(error){
 			console.log("Access token fetch error!");
 		});
-		
-		
 	};
 	$scope.contentLoaded = false;
 });
