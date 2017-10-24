@@ -123,7 +123,7 @@
 						</thead>
 						<tbody ng-repeat="x in allPredictions">
 							<tr ng-repeat="y in x.predictions" ng-show="y.matchUri==gamePlan.uri">
-								<td class="name titles">{{x.uri.split('/')[2]}}</td>
+								<td class="name titles">{{x.fname}} {{x.lname}}</td>
 								<td class="titles">{{y.opt1.goal>y.opt2.goal?y.opt1.name:(y.opt1.goal==y.opt2.goal?'Draw':y.opt2.name)}}</td>
 								<td class="titles">{{y.opt1.goal}}</td>
 								<td class="titles">{{y.opt2.goal}}</td>

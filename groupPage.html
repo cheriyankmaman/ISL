@@ -85,27 +85,32 @@
 								<button ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><</button><button ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match">></button>
 							</div>
 						</div>
-						<div class="panel-body">
-							<table class="table table-striped">
+						<div class="col-lg-12 result-table" style="padding: 0px; margin: 0px 8px 0px 8px;">
+							<table border='1' class="table-hover table-responsive">
 								<thead>
 									<tr>
-										<th>Members</th>
-										<th></th>
-										<th>Points</th>
+										<th rowspan="2" class="titles">Name</th>
+										<th rowspan="2" class="titles">Result/Win team</th>
+										<th colspan="2" class="titles">Score</th>
+										<th rowspan="2" class="titles">Goal Difference</th>
+										<th rowspan="2" class="titles">Kick off</th>
+									</tr>
+									<tr>
+										<th class="titles">{{gamePlan.opt1.name}}</th>
+										<th class="titles">{{gamePlan.opt2.name}}</th>
 									</tr>
 								</thead>
-								<tbody ng-repeat="x in memberResult">
-									<tr ng-click="viewSpecific()">
-										<td width="80%">{{x.fname}}</td>
-										<td width="20%" ng-repeat="b in x.scores" ng-if="b.matchUri==gamePlan.uri">{{b.score}}</td>
-									</tr>
-									<tr ng-repeat="a in allPredictions | filterData: '/predict/'+x.uri.split('/')[2]: gamePlan.uri : 'predict': 'predict'"">
-										<td width="80%" class="predict">{{a.qz}}</td>
-										<td width="20%" class="predict">{{a.ans}}</td>
+								<tbody ng-repeat="x in allPredictions">
+									<tr ng-repeat="y in x.predictions" ng-show="y.matchUri==gamePlan.uri">
+										<td class="name titles">{{x.fname}} {{x.lname}}</td>
+										<td class="titles">{{y.opt1.goal>y.opt2.goal?y.opt1.name:(y.opt1.goal==y.opt2.goal?'Draw':y.opt2.name)}}</td>
+										<td class="titles">{{y.opt1.goal}}</td>
+										<td class="titles">{{y.opt2.goal}}</td>
+										<td class="titles">{{y.opt1.goal-y.opt2.goal | makePositive }}</td>
+										<td class="titles">{{y.kickoff}}</td>
 									</tr>
 								</tbody>
 							</table>
-{{allPredictions}}::{{memberResult}}
 						</div>
 					</div>
 				</div>
@@ -134,8 +139,5 @@
 			</div>
 		</div>
 	</div>
-	<!-- /#wrapper -->
-
-	
 </body>
 </html>

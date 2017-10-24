@@ -756,7 +756,7 @@ pre code {
 }
 .row.updates {
 	border: 1px solid dimgrey;
-    border-radius: 9px;
+    border-radius: 0px;
     margin-bottom: 2%;
 }
 .result-table{
@@ -5252,8 +5252,8 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover,
 .panel-heading {
 	padding: 10px 15px;
 	border-bottom: 1px solid transparent;
-	border-top-right-radius: 3px;
-	border-top-left-radius: 3px;
+	border-top-right-radius: 0px;
+	border-top-left-radius: 0px;
 }
 
 .panel-heading>.dropdown .dropdown-toggle {
@@ -5472,13 +5472,17 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover,
 }
 
 .panel-primary {
-	border-color: #2a9fd6;
+	border-color: red;
+	border-radius: 0px;
 }
 
 .panel-primary>.panel-heading {
 	color: #ffffff;
-	background-color: #0f88c1;
-	border-color: #0f88c1;
+	background: red; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(red, yellow); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(red, yellow); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(red, yellow); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(red, yellow); /* Standard syntax (must be last) */
 }
 
 .panel-primary>.panel-heading+.panel-collapse .panel-body {

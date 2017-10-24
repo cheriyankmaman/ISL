@@ -36,7 +36,7 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 		$scope.contentLoaded = true;
 			var req = {
 						method : 'GET',
-						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predicts',
+						url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict',
 						headers : {
 							'Authorization' : 'Bearer ' +uaaToken,
 							'Content-Type' : 'application/json',

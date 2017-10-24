@@ -22,6 +22,7 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 	};
 	
 	$scope.registerToApp = function(){
+		$scope.contentLoaded = true;
 		$scope.profile.uri="/profile/"+$scope.profile.mob;
 		$scope.emptyArray=[];
 		$scope.profile.score = $scope.emptyArray;
@@ -33,8 +34,9 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 		$scope.score.scores = $scope.emptyArray;
 		$scope.predict = {};
 		$scope.predict.uri = "/predict/"+$scope.profile.uri.split("/")[2];
+		$scope.predict.fname = $scope.profile.fname;
+		$scope.predict.lname = $scope.profile.lname;
 		$scope.predict.predictions = $scope.emptyArray;
-		console.log($scope.profile);
 		
 		$scope.getAccessToken().then(function(uaaToken) {
 			
@@ -71,7 +73,8 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 									data:$scope.predict
 								};
 								$http(req).then(function(response) {
-									console.log("Registration completed");
+									$scope.contentLoaded = false;
+									$window.location.href = 'login.html';
 								},function(error){ 
 									console.log("Error in registration3:"+JSON.stringify(error));
 								});
@@ -87,4 +90,5 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 		
 		
 	};
+	$scope.contentLoaded = false;
 });
