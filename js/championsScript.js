@@ -11,6 +11,7 @@ angular.module('campiansApp', []).controller(
 					$scope.chart_type='column';
 					$scope.option_3d={};
 					$scope.contentLoaded=true;
+					$scope.alreadyPredicted = false;
 					$scope.tab1 = true;
 					$scope.tab2 = false;
 					$scope.myPrediction={"matchUri":"","opt1":{"name":"","goal":0},"opt2":{"name":"","goal":0},"kickoff":""};
@@ -136,12 +137,13 @@ angular.module('campiansApp', []).controller(
 						});
 						return deferred.promise;
 					};
+					
 
 					$scope.predict = function(){
+						$scope.contentLoaded=true;
 						$scope.myPrediction.matchUri = $scope.gameToPredict.uri;
 						$scope.myPrediction.opt1.name = $scope.gameToPredict.opt1.name;
 						$scope.myPrediction.opt2.name = $scope.gameToPredict.opt2.name;
-						console.log(JSON.stringify($scope.myPrediction));
 						$scope.getAccessToken().then(function(uaaToken) {
 							
 							var req = {
@@ -158,6 +160,7 @@ angular.module('campiansApp', []).controller(
 								angular.forEach($scope.predictionObject[0].predictions, function(value){
 									if(value.matchUri == $scope.myPrediction.matchUri){
 										$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
+										$scope.alreadyPredicted = true;
 									}
 								});
 								$scope.predictionObject[0].predictions.push($scope.myPrediction);
@@ -172,7 +175,8 @@ angular.module('campiansApp', []).controller(
 									data:$scope.predictionObject[0]
 									};
 									$http(req).then(function(response) {
-										console.log("predicted!");
+										$scope.contentLoaded=false;
+										$window.location.reload();
 									},function(error){
 										console.log("error in add prediction");
 									});
@@ -228,7 +232,7 @@ angular.module('campiansApp', []).controller(
 										};
 									$http(req).then(function(response1) {
 											$scope.memberResult = response1.data;
-											
+											console.log(response1.data);
 											/*Chart Generation*/
 											$scope.score=0;
 											$scope.data=[];
@@ -256,7 +260,9 @@ angular.module('campiansApp', []).controller(
 											$scope.completeData = {name: 'Member',colorByPoint: true,data:$scope.data};
 											$scope.completeDataArray.push($scope.completeData);
 											$scope.drilldownObj = {series:$scope.drillSeriesArray};
-											//$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
+											console.log($scope.completeDataArray);
+											console.log($scope.drilldownObj);
+											$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
 											
 											/*End of chart generation*/
 											
@@ -288,8 +294,27 @@ angular.module('campiansApp', []).controller(
 												};
 												$http(req).then(function(response5) {
 													$scope.allPredictions = response5.data;
+													var req = {
+															method : 'GET',
+															url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
+															headers : {
+																'Authorization' : 'Bearer '+ uaaToken,
+																'Content-Type' : 'application/json',
+																'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+																	}
+															};
+															$http(req).then(function(response) {
+																$scope.predictionObject = response.data;
+																
+																angular.forEach($scope.predictionObject[0].predictions, function(value){
+																	if(value.matchUri == $scope.gameToPredict.uri){
+																		//$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
+																		$scope.alreadyPredicted = true;
+																	}
+																});
+																$scope.contentLoaded = false;
+															},function(error){});
 													$scope.createChartDatas();
-													$scope.contentLoaded = false;
 												},
 												function(error) {
 													console.log("get score: "+ error);
@@ -321,7 +346,7 @@ angular.module('campiansApp', []).controller(
 							$scope.gamePlan = $scope.gamePlans[0];
 							$scope.gameToPredict = $scope.gamePlans[0];
 							angular.forEach($scope.gamePlans, function(value){
-								if(value.winner != "" && $scope.gamePlan.match<value.match){
+								if(value.winner != "" && $scope.gamePlan.match<=value.match){
 									$scope.gamePlan = value;
 									if($scope.gamePlans.indexOf(value)!=$scope.gamePlans.length)
 										$scope.gameToPredict = $scope.gamePlans[$scope.gamePlans.indexOf(value)+1];
@@ -336,7 +361,7 @@ angular.module('campiansApp', []).controller(
 				$scope.getGamePlan = function(value){
 					$scope.gamePlan = $scope.gamePlans[$scope.gamePlan.match+(2*value)]
 				};
-				/*$scope.changeChartType = function(){
+				$scope.changeChartType = function(){
 					if($scope.chart_type=='pie'){
 						$scope.option_3d={enabled: true,alpha: 45};
 						$scope.opt={enabled : true,format : '{point.name}:{point.y:.1f}'};
@@ -346,7 +371,7 @@ angular.module('campiansApp', []).controller(
 						$scope.opt={enabled: true,format: '{point.y:.1f}'};
 					}
 					$scope.getChart($scope.completeDataArray,$scope.drilldownObj);
-				};*/
+				};
 					
 					$scope.getGamePlans();
 					$scope.getProfile();
@@ -361,54 +386,52 @@ angular.module('campiansApp', []).controller(
 					};
 					
 
-					/*$scope.getChart = function(data1,data2,type){
+					$scope.getChart = function(data1,data2,type){
 					$(function() {
 						$('#container')
 								.highcharts(
 										{
-											chart : {
-												type : $scope.chart_type,
-												options3d: $scope.option_3d
-											},
-											title : {
-												text : $scope.chartTitle
-											},
-											subtitle : {
-												text : 'Champions Trophy - point graph'
-											},
-											xAxis : {
-												type : 'category'
-											},
-											yAxis : {
-												title : {
-													text : 'Total points'
-												}
-
-											},
-											legend : {
-												enabled : false
-											},
-											plotOptions : {
-												series : {
-													borderWidth : 0,
-													dataLabels : $scope.opt
-												},
-												pie: {
-										            innerSize: '50%',
-										            depth: 45
+											chart: {
+										        type: type
+										    },
+										    title: {
+										        text: 'ISL Stars'
+										    },
+										    subtitle: {
+										        text: 'Indian Super League Point table'
+										    },
+										    xAxis: {
+										        type: 'category'
+										    },
+										    yAxis: {
+										        title: {
+										            text: 'Total Score'
 										        }
-											},
 
-											tooltip : {
-												headerFormat : '<span style="font-size:11px">{series.name}</span><br>',
-												pointFormat : '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
-											},
+										    },
+										    legend: {
+										        enabled: false
+										    },
+										    plotOptions: {
+										        series: {
+										            borderWidth: 0,
+										            dataLabels: {
+										                enabled: true,
+										                format: '{point.y}'
+										            }
+										        }
+										    },
 
-											series : data1,
-											drilldown : data2
+										    tooltip: {
+										        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+										        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+										    },
+
+										    series: data1,
+										    drilldown: data2
 										});
 					});
-					};*/
+					};
 				}).filter('filterData', function(){
 					  return function(data, uri, muri, firstParam, secondParam){
 						    var returnData = [];

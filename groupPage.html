@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Dark Admin</title>
+<title>Points :: ISL Stars</title>
 
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
@@ -49,8 +49,8 @@
 				<ul id="active" class="nav navbar-nav side-nav">
 					<li ng-click="changeGroup(-1,{})" ng-class="dash"><a href="index.html"><i class="fa fa-bullseye"></i>
 							Dashboard</a></li>
-					<li ng-class="select[$index]" ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
-							class="fa fa-tasks"></i> Details</a></li>
+					<li class="selected" ng-click="changeGroup($index,x)"><a href="groupPage.html"><i
+							class="fa fa-tasks"></i> Points</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right navbar-user">
 					
@@ -78,11 +78,13 @@
 				<div class="col-lg-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading col-lg-12">
-							<div class="col-lg-10">
-								<i class="fa fa-futbol-o" aria-hidden="true"></i> {{gamePlan.opt1.name}} vs {{gamePlan.opt2.name}}
+							<div class="col-lg-10 game-plan-discription">
+								<i class="fa fa-futbol-o" aria-hidden="true"></i> <font class="game-plan">{{gamePlan.opt1.name}}<span ng-if="gamePlan.winner!=''">({{gamePlan.opt1.goal}})</span> vs {{gamePlan.opt2.name}}<span ng-if="gamePlan.winner!=''">({{gamePlan.opt2.goal}})</span></font><br>
+								<font class="game-discription" ng-if="gamePlan.kickoff!=''">Kickoff - {{gamePlan.kickoff}}</font>
+								<font class="game-discription" ng-if="gamePlan.kickoff==''">Not Started</font>
 							</div>
 							<div class="col-lg-2">
-								<button ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><</button><button ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match">></button>
+								<button class="left-arrow" ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><i class="fa fa-arrow-left" aria-hidden="true"></i></button><button class="right-arrow" ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 							</div>
 						</div>
 						<div class="col-lg-12 result-table" style="padding: 0px; margin: 0px 8px 0px 8px;">

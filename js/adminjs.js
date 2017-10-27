@@ -64,7 +64,15 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 	$scope.updateGame = function(){
 		$scope.contentLoaded = true;
 		$scope.getAccessToken().then(function(uaaToken){
-			
+			if($scope.gamePlan.opt1.goal>$scope.gamePlan.opt2.goal){
+				$scope.gamePlan.winner = $scope.gamePlan.opt1.name;
+			}
+			else if($scope.gamePlan.opt1.goal<$scope.gamePlan.opt2.goal){
+				$scope.gamePlan.winner = $scope.gamePlan.opt2.name;
+			}
+			else{
+				$scope.gamePlan.winner = "Draw";
+			}
 			var req = {
 				method : 'PUT',
 				url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.gamePlan.uri,

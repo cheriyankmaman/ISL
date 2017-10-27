@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Champians</title>
+<title>Login - ISL Stars</title>
 
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
@@ -30,13 +30,7 @@
 		</div>
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-ex1-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="login.html">Champians</a>
+				<a class="navbar-brand" href="login.html">ISL Stars</a>
 			</div>
 
 		</nav>
@@ -46,30 +40,41 @@
 		<div id="page-wrapper">
 
 			<div class="row">
-
-				<div class="col-lg-12 v-center">
-
+				<div class="col-lg-12">
 					<h1>Sign In</h1>
 					<p class="lead">Please Login and have fun!</p>
+				</div>
+				<div class="col-lg-4 v-center reg-form">
 
 					<form class="col-lg-12" ng-submit="registerToApp()">
-						First Name<input type="text" class="form-control"
-							ng-model="profile.fname" required="required"> 
-						Last Name<input
-							type="text" class="form-control" ng-model="profile.lname"
-							required="required">
-						Mobile Number<input type="number"
-							class="form-control" ng-model="profile.mob" required="required" maxlength="10">
-						Enter Password<input type="password" class="form-control"
-							ng-model="profile.paswrd" required="required"> 
-						Re-Enter Password<input type="password" class="form-control"
-							ng-model="passwd" required="required">
+						<input type="text" class="form-control play-reg-input"
+							ng-model="profile.fname" required="required" placeholder="First Name"> 
+						<input
+							type="text" class="form-control play-reg-input" ng-model="profile.lname"
+							required="required" placeholder="Last Name">
+						<input type="number"
+							class="form-control play-reg-input" ng-model="profile.mob" placeholder="Mobile Number" required="required" maxlength="10">
+						<input type="password" class="form-control play-reg-input"
+							ng-model="profile.paswrd" required="required" placeholder="Enter Password"> 
+						<input type="password" class="form-control play-reg-input"
+							ng-model="passwd" required="required" placeholder="Re-Enter Password">
 						<button type="submit" class="btn btn-primary"
 							ng-disabled="profile.paswrd!=passwd ||
                          profile.paswrd==undefined || passwd==undefined || (profile.paswrd+'').length<6 ||
                           (profile.mob+'').length!=10 || profile.mob==undefined || profile.fname == undefined ||
                            profile.lname==undefined">Sign Up</button>
 					</form>
+				</div>
+				<div class="col-lg-4 instructions">
+					<font>Instructions</font>
+					<ul>
+						<li>All fields are mandatory.</li>
+						<li>Mobile number of 10 digits only allowed.</li>
+						<li>Password should be more than 6 character.</li>
+					</ul>
+				</div>
+				<div class="col-lg-4">
+				
 				</div>
 			</div>
 
