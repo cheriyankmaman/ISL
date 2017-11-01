@@ -33,7 +33,9 @@
 	<div id="wrapper" ng-app="campiansApp" ng-controller="champiansCtrl"
 		ng-init="initGroupPage('others')">
 		<div class="loading" ng-if="contentLoaded">
-			<div id="loader"></div>
+			<!-- <div id="loader"></div> -->
+			<div class="load">Loading...</div>
+			<div class="loader">Loading...</div>
 		</div>
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
@@ -87,8 +89,8 @@
 								<button class="left-arrow" ng-click="getGamePlan(-1)" ng-disabled="gamePlan.match==1"><i class="fa fa-arrow-left" aria-hidden="true"></i></button><button class="right-arrow" ng-click="getGamePlan(0)" ng-disabled="gamePlans.length==gamePlan.match"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 							</div>
 						</div>
-						<div class="col-lg-12 result-table" style="padding: 0px; margin: 0px 8px 0px 8px;">
-							<table border='1' class="table-hover table-responsive">
+						<div class="col-lg-12 result-table" style="padding: 0px; margin: 0px 8px 0px 8px; width: -webkit-fill-available">
+							<table border='1' class="table-hover table-responsive" style="width: inherit;">
 								<thead>
 									<tr>
 										<th rowspan="2" class="titles">Name</th>
@@ -119,18 +121,10 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="panel panel-primary">
+					<div class="panel panel-primary" style="margin-top: 5px;">
 						<div class="panel-heading col-lg-12">
-							<div class="col-lg-10">
-								<h3 class="panel-title">Total</h3>
-							</div>
-							<div class="col-lg-2">
-								<select class="form-control" ng-model="chart_type" ng-change="changeChartType()">
-									<option>line</option>
-									<option>bar</option>
-									<option>column</option>
-									<option>pie</option>
-								</select>
+							<div class="col-lg-12">
+								<h3 class="panel-title">Scores</h3>
 							</div>
 						</div>
 						<div class="panel-body">

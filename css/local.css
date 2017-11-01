@@ -272,7 +272,11 @@ body {
 	font-size: 14px;
 	line-height: 1.42857143;
 	color: #BDBDBD;
-	background-color: #060606;
+	background: #0c0b94; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#0c0b94, black); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#0c0b94, black); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#0c0b94, black); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#0c0b94, black); /* Standard syntax (must be last) */
 }
 
 input, button, select, textarea {
@@ -303,7 +307,7 @@ figure {
 
 img {
 	vertical-align: middle;
-	width: 70%;
+	width: 100%;
 }
 
 .img-responsive, .thumbnail>img, .thumbnail a>img, .carousel-inner>.item>img,
@@ -765,13 +769,14 @@ pre code {
 
 .titles{
 	text-align: -webkit-center;
+	padding: 0px !important;
 }
 .goal-input{
 	width: 32% !important;
     text-align-last: center;
 }
 .quiz-title{
-	font-size: 3em;
+	font-size: 1em;
 }
 .mouse-point{
 	cursor: pointer;
@@ -4388,8 +4393,11 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 }
 
 .navbar-inverse {
-	background-color: #222222;
-	border-color: #080808;
+	background: #0c0b94; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#0c0b94, black); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#0c0b94, black); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#0c0b94, black); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#0c0b94, black); /* Standard syntax (must be last) */
 }
 
 .navbar-inverse .navbar-brand {
@@ -4429,7 +4437,7 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 }
 
 .navbar-inverse .navbar-toggle {
-	border-color: #333333;
+	border-color: #ffffff;
 }
 
 .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus
@@ -6321,7 +6329,7 @@ button.close {
 }
 
 .navbar {
-	border-bottom: 1px solid #282828;
+	border-bottom: 1px solid #000000;
 }
 
 .text-primary, .text-primary:hover {
@@ -6866,6 +6874,20 @@ table.tablesorter thead tr th:hover {
 }
 @media ( max-width : 1200px) {
 	.quiz-panel{
+		width: 30%;
+		float: left;
+	}
+	.right-img{
+		text-align: left;
+	}
+	.left-img{
+		text-align: right;
+	}
+	.quiz-panel1{
+		width: 20%;
+		float: left;
+	}
+	.quiz-panel2{
 		width: 50%;
 		float: left;
 	}
@@ -7002,6 +7024,16 @@ input[type=number]::-webkit-outer-spin-button {
 .right-arrow:active{
 	background-color: #9d0000;
 }
+.back-button{
+	background-color: #00800000;
+	border: 1px solid #ffffff;
+    border-radius: 9px 0px 0px 9px;
+    padding: 4px 17px 3px 17px;
+    outline: none;
+}
+.back-button:active{
+	background-color: #ffffff;
+}
 .game-plan{
 	font-style: oblique;
 }
@@ -7029,6 +7061,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .instructions font {
   font-size: 25px;
+}
+.submit-button{
+	text-align: center;
 }
 @media (min-width: 767px) and (max-width: 1200px) {
 	.instructions, .reg-form{

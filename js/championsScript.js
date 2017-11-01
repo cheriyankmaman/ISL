@@ -1,6 +1,6 @@
 angular.module('campiansApp', []).controller(
 				'champiansCtrl',
-				function($scope, $window, $http, $q, $filter) {
+				function($scope, $window, $http, $q, $filter, $timeout) {
 					/*
 					 * $scope.profile = { "uri" : "/profile/cheriyan", "fname" :
 					 * "Cheriyan", "lname" : "KM", "groups" : [ "/groups/heros",
@@ -46,6 +46,11 @@ angular.module('campiansApp', []).controller(
 						$scope.tab1 = false;
 						$scope.tab2 = true;
 					};
+					$scope.goBack = function(){
+						$scope.tab1 = true;
+						$scope.tab2 = false;
+					};
+					
 					$scope.initGroupPage = function(value) {
 						$scope.teamImage = {
 								"ATK":"Atletico_Kolkata_FC",
@@ -386,13 +391,13 @@ angular.module('campiansApp', []).controller(
 					};
 					
 
-					$scope.getChart = function(data1,data2,type){
+					$scope.getChart = function(data1,data2){
 					$(function() {
 						$('#container')
 								.highcharts(
 										{
 											chart: {
-										        type: type
+										        type: 'column'
 										    },
 										    title: {
 										        text: 'ISL Stars'

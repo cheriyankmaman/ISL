@@ -119,34 +119,39 @@
 						</div>
 						<div class="panel-body" ng-hide="alreadyPredicted">
 							<div class="col-lg-12" ng-show="tab1">
-								<div class="col-lg-12 titles quiz-title">Kickoff</div>
+								<div class="col-lg-12 titles quiz-title">Which team will kickoff the match</div>
 								<div class="col-lg-12">
-									<div class="col-lg-6 titles quiz-panel">
+									<div class="col-lg-6 titles quiz-panel2">
 										<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png">
 									</div>
-									<div class="col-lg-6 titles quiz-panel">
+									<div class="col-lg-6 titles quiz-panel2">
 										<img ng-click="selectKickOff(gameToPredict.opt2.name)" class="mouse-point" alt="{{gameToPredict.opt2.name}}" src="images/{{teamImage[gameToPredict.opt2.name]}}.png">
 									</div>
 								</div>
 							</div>
 							<div class="row" ng-show="tab2">
-								<div class="col-lg-12 titles quiz-title">Score</div>
+							<button class="back-button" ng-click="goBack()"> <i class="fa fa-arrow-left" aria-hidden="true"></i>Back </button>
+								<div class="col-lg-12 titles quiz-title">Predict the score</div>
 								<div class="col-lg-12" style="display: block; overflow: auto;">
-									<div class="col-lg-6 titles quiz-panel">
+									<div class="col-lg-4 titles quiz-panel left-img">
+										<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png">
+									</div>
+									<div class="col-lg-2 titles quiz-panel1">
 										<div id="opt1_plus"><button ng-click="opt1plus()" class="plus-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
 										<div>{{myPrediction.opt1.goal}}</div>
 										<div id="opt1_minus"><button ng-click="opt1minus()" class="minus-btn"><i class="fa fa-minus" aria-hidden="true"></i></button></div>
-										<img ng-click="selectKickOff(gameToPredict.opt1.name)" class="mouse-point" alt="{{gameToPredict.opt1.name}}" src="images/{{teamImage[gameToPredict.opt1.name]}}.png">
 									</div>
-									<div class="col-lg-6 titles quiz-panel">
+									<div class="col-lg-2 titles quiz-panel1">
 										<div id="opt2_plus"><button ng-click="opt2plus()" class="plus-btn"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
 										<div>{{myPrediction.opt2.goal}}</div>
 										<div id="opt2_minus"><button ng-click="opt2minus()" class="minus-btn"><i class="fa fa-minus" aria-hidden="true"></i></button></div>
+									</div>
+									<div class="col-lg-4 titles quiz-panel right-img">
 										<img ng-click="selectKickOff(gameToPredict.opt2.name)" class="mouse-point" alt="{{gameToPredict.opt2.name}}" src="images/{{teamImage[gameToPredict.opt2.name]}}.png">
 									</div>
 								</div>
-								<div class="col-lg-12">
-									<input type="button" class="btn" value="Submit" ng-click="predict()">
+								<div class="col-lg-12 submit-button">
+									<input type="button" class="btn btn-primary" value="Submit" ng-click="predict()">
 								</div>
 							</div>
 						</div>
