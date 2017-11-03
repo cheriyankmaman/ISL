@@ -272,11 +272,7 @@ body {
 	font-size: 14px;
 	line-height: 1.42857143;
 	color: #BDBDBD;
-	background: #0c0b94; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#0c0b94, black); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#0c0b94, black); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#0c0b94, black); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#0c0b94, black); /* Standard syntax (must be last) */
+	background-color: #0c0b94;
 }
 
 input, button, select, textarea {
@@ -6568,7 +6564,7 @@ table.tablesorter thead tr th:hover {
 		height: 100%;
 		border-radius: 0;
 		border: none;
-		background-color: #222222;
+		background-color: #0c0b94;
 		overflow-y: auto;
 	}
 
@@ -7069,6 +7065,11 @@ input[type=number]::-webkit-outer-spin-button {
 	.instructions, .reg-form{
 		width: 43.33%;
     	float: left;
+	}
+}
+@media min-width: 1200px {
+	img .mouse-point{
+		
 	}
 }
 @media ( max-width : 450px) {
