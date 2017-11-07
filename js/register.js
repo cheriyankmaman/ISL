@@ -27,6 +27,7 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 		$scope.profile.uri="/profile/"+$scope.profile.mob;
 		$scope.emptyArray=[];
 		$scope.profile.score = $scope.emptyArray;
+		$scope.profile.follow = $scope.emptyArray;
 		$scope.score = {};
 		$scope.score.uri = "/score/"+$scope.profile.uri.split("/")[2];
 		$scope.score.profileUri  =$scope.profile.uri;
@@ -42,7 +43,7 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 		$scope.getAccessToken().then(function(uaaToken) {
 			var req = {
 					method : 'GET',
-					url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/profile',
+					url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/profile/'+$scope.profile.mob,
 					headers : {
 						'Authorization' : 'Bearer '+ uaaToken,
 						'Content-Type' : 'application/json',
@@ -50,15 +51,14 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 							}
 					};
 			$http(req).then(function(response) {
-				angular.forEach(response.data, function(value){
-					if(value.mob==$scope.profile.mob){
-						$scope.alreadyRegistered = true;
-					}
-				});
+				alert(response.data.length);
+
+				alert("Already registered!!");
+				$scope.contentLoaded = false;
+				$window.location.href = 'login.html';
+			
 			},function(error){
-				
-			});
-			if($scope.alreadyRegistered){
+
 				var req = {
 				method : 'PUT',
 				url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.profile.uri,
@@ -103,12 +103,9 @@ angular.module('registerApp', []).controller('registerCtrl', function($scope, $w
 				},function(error){ 
 					console.log("Error in registration1:"+JSON.stringify(error));
 				});
-			}
-			else{
-				alert("Already registered!!");
-				$scope.contentLoaded = false;
-				$window.location.href = 'login.html';
-			}
+			
+			});
+			
 		},function(error){
 			console.log("Access token fetch error!");
 		});

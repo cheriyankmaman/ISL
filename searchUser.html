@@ -32,11 +32,10 @@
 <body>
 	<div id="wrapper" ng-app="searchApp" ng-controller="searchController"
 		ng-init="initGroupPage('others')">
-		<!-- <div class="loading" ng-if="contentLoaded">
-			<div id="loader"></div>
+		<div class="loading" ng-if="contentLoaded">
 			<div class="load">Loading...</div>
 			<div class="loader">Loading...</div>
-		</div> -->
+		</div>
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -78,8 +77,21 @@
 		</nav>
 
 		<div id="page-wrapper">
-			<div class="row">
-				
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<form ng-submit="search()" class="">
+							<input type="number" ng-model="mobNum" class="form-control search-field" placeholder="Mobile Number">
+							<button type="submit" ng-disabled="(mobNum+'').length!=10 || mobNum==undefined" class="btn btn-primary search-btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+						</form>
+					</div>
+					<div class="col-lg-12" ng-if="searchResult[0].uri!=undefined">
+						{{searchResult[0].fname}} {{searchResult[0].lname}} <button type="button" class="btn btn-primary" ng-click="follow()" ng-disabled="result.follow=='Following'">{{result.follow}}</button>
+					</div>
+					<div class="col-lg-12" ng-if="searchResult[0].uri==undefined">
+						{{result.msg}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

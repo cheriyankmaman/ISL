@@ -6470,6 +6470,11 @@ legend {
 	visibility: hidden;
 }
 
+.registration{
+	text-align: center;
+	margin-top: 20px;
+}
+
 .text-hide {
 	font: 0/0 a;
 	color: transparent;
@@ -6690,6 +6695,16 @@ table.tablesorter thead tr th:hover {
 
 .selected {
 	border-left: 7px solid #2A9FD6;
+}
+
+.search-field{
+	width: 80%;
+	float: left;
+}
+
+.search-btn{
+	width: 20%;
+	float: left;
 }
 
 .timeline {

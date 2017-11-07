@@ -208,7 +208,14 @@ angular.module('campiansApp', []).controller(
 							};
 							$http(req).then(function(response1) {
 								$scope.profile = response1.data;
-								
+								$scope.scoreSubString="";
+								$scope.predictSubString="";
+								$scope.scoreSubString = $scope.scoreSubString + "uri=/score/"+$scope.mobNoOfUser;
+								$scope.predictSubString = $scope.predictSubString + "uri=/predict/"+$scope.mobNoOfUser;
+								angular.forEach(response1.data[0].follow, function(value){
+									$scope.scoreSubString = $scope.scoreSubString + "|uri=/score/"+value;
+									$scope.predictSubString = $scope.predictSubString + "|uri=/predict/"+value;
+								});
 								var name = $scope.profile[0].uri;
 								var nameArray = name.split("/");
 								var req = {
@@ -228,7 +235,7 @@ angular.module('campiansApp', []).controller(
 								
 								var req = {
 										method : 'GET',
-										url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/score',
+										url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/score?filter='+$scope.scoreSubString,
 										headers : {
 											'Authorization' : 'Bearer '+ uaaToken,
 											'Content-Type' : 'application/json',
@@ -290,7 +297,7 @@ angular.module('campiansApp', []).controller(
 											});
 											var req = {
 													method : 'GET',
-													url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict',
+													url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict?filter='+$scope.predictSubString,
 													headers : {
 														'Authorization' : 'Bearer '+ uaaToken,
 														'Content-Type' : 'application/json',
