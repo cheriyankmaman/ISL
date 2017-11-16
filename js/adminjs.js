@@ -73,6 +73,8 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 			else{
 				$scope.gamePlan.winner = "Draw";
 			}
+			$scope.gamePlan.goaldiff = Math.abs($scope.gamePlan.opt2.goal - $scope.gamePlan.opt1.goal)
+			console.log($scope.gamePlan);
 			var req = {
 				method : 'PUT',
 				url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io'+$scope.gamePlan.uri,

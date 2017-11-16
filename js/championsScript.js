@@ -165,7 +165,7 @@ angular.module('campiansApp', []).controller(
 								angular.forEach($scope.predictionObject[0].predictions, function(value){
 									if(value.matchUri == $scope.myPrediction.matchUri){
 										$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
-										$scope.alreadyPredicted = true;
+										
 									}
 								});
 								$scope.predictionObject[0].predictions.push($scope.myPrediction);
@@ -180,6 +180,7 @@ angular.module('campiansApp', []).controller(
 									data:$scope.predictionObject[0]
 									};
 									$http(req).then(function(response) {
+										$scope.alreadyPredicted = true;
 										$scope.contentLoaded=false;
 										$window.location.reload();
 									},function(error){

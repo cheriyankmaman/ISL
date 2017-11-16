@@ -86,10 +86,22 @@
 						</form>
 					</div>
 					<div class="col-lg-12" ng-if="searchResult[0].uri!=undefined">
-						{{searchResult[0].fname}} {{searchResult[0].lname}} <button type="button" class="btn btn-primary" ng-click="follow()" ng-disabled="result.follow=='Following'">{{result.follow}}</button>
+						{{searchResult[0].fname}} {{searchResult[0].lname}} <button type="button" ng-if="clickedOnFollow" class="btn btn-primary" ng-click="follow()" ng-disabled="result.follow=='Following'">{{result.follow}}</button>
+						<button type="button" ng-if="!clickedOnFollow" class="btn btn-primary"><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="margin: 0px 9px 0px 9px; font-size: 18px;"></i></button>
 					</div>
 					<div class="col-lg-12" ng-if="searchResult[0].uri==undefined">
 						{{result.msg}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<table>
+							<tr ng-repeat="fw in followings">
+								<td>{{fw.fname}}</td>
+								<td>{{fw.lname}}</td>
+								<td><button class="btn btn-primary" ng-click="unfollow(fw.uri,$index)">Unfollow</button></td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
