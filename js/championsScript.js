@@ -150,44 +150,62 @@ angular.module('campiansApp', []).controller(
 						$scope.myPrediction.opt1.name = $scope.gameToPredict.opt1.name;
 						$scope.myPrediction.opt2.name = $scope.gameToPredict.opt2.name;
 						$scope.getAccessToken().then(function(uaaToken) {
-							
 							var req = {
-							method : 'GET',
-							url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
-							headers : {
-								'Authorization' : 'Bearer '+ uaaToken,
-								'Content-Type' : 'application/json',
-								'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+								method : 'GET',
+								url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/active',
+								headers : {
+									'Authorization' : 'Bearer '+ uaaToken,
+									'Content-Type' : 'application/json',
+									'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+										}
+								};
+								$http(req).then(function(response5) {
+									if(response5.data[0].status == true){
+										var req = {
+										method : 'GET',
+										url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
+										headers : {
+											'Authorization' : 'Bearer '+ uaaToken,
+											'Content-Type' : 'application/json',
+											'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+												}
+										};
+										$http(req).then(function(response) {
+											$scope.predictionObject = response.data;
+											angular.forEach($scope.predictionObject[0].predictions, function(value){
+												if(value.matchUri == $scope.myPrediction.matchUri){
+													$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
+													
+												}
+											});
+											$scope.predictionObject[0].predictions.push($scope.myPrediction);
+											var req = {
+												method : 'PUT',
+												url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
+												headers : {
+													'Authorization' : 'Bearer '+ uaaToken,
+													'Content-Type' : 'application/json',
+													'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+														},
+												data:$scope.predictionObject[0]
+												};
+												$http(req).then(function(response) {
+													$scope.alreadyPredicted = true;
+													$scope.contentLoaded=false;
+													$window.location.reload();
+												},function(error){
+													console.log("error in add prediction");
+												});
+										},function(error){
+											console.log("error in get prdictions");
+										});
 									}
-							};
-							$http(req).then(function(response) {
-								$scope.predictionObject = response.data;
-								angular.forEach($scope.predictionObject[0].predictions, function(value){
-									if(value.matchUri == $scope.myPrediction.matchUri){
-										$scope.predictionObject[0].predictions.splice($scope.predictionObject[0].predictions.indexOf(value), 1);
-										
-									}
-								});
-								$scope.predictionObject[0].predictions.push($scope.myPrediction);
-								var req = {
-									method : 'PUT',
-									url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/predict/'+ $scope.mobNoOfUser,
-									headers : {
-										'Authorization' : 'Bearer '+ uaaToken,
-										'Content-Type' : 'application/json',
-										'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
-											},
-									data:$scope.predictionObject[0]
-									};
-									$http(req).then(function(response) {
-										$scope.alreadyPredicted = true;
+									else{
+										alert("Time up for this prediction, Sorry...");
 										$scope.contentLoaded=false;
-										$window.location.reload();
-									},function(error){
-										console.log("error in add prediction");
-									});
+									}
 							},function(error){
-								console.log("error in get prdictions");
+								
 							});
 						},function(error){
 							

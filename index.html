@@ -117,6 +117,7 @@
 						<div class="panel-heading">
 							<h3 class="panel-title">
 								<i class="fa fa-lightbulb-o" aria-hidden="true"></i> Predict here !!
+								<i class="fa fa-info-circle" style="float: right; cursor: pointer;" aria-hidden="true"data-toggle="modal" data-target="#myModal"></i> 
 							</h3>
 						</div>
 						<div class="panel-body" ng-hide="alreadyPredicted">
@@ -167,22 +168,39 @@
 				</div>
 			</div>
 			<!-- Modal -->
-			  <div class="modal fade" id="myModal" role="dialog">
-			    <div class="modal-dialog modal-sm">
-			      <div class="modal-content">
-			        <div class="modal-header">
-			          <button type="button" class="close" data-dismiss="modal">&times;</button>
-			          <h4 class="modal-title">Modal Header</h4>
-			        </div>
-			        <div class="modal-body">
-			          <p>This is a small modal.</p>
-			        </div>
-			        <div class="modal-footer">
-			          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        </div>
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Information</h4>
+			      </div>
+			      <div class="modal-body">
+			        <table style="width: 100%;">
+			        	<tr>
+			        		<td>Right Kick off</td>
+			        		<td>+3 Points</td>
+			        	</tr>
+			        	<tr>
+			        		<td>Right Score</td>
+			        		<td>+5 POints</td>
+			        	</tr>
+			        	<tr>
+			        		<td>Wrong Score</td>
+			        		<td>-3 Points</td>
+			        	</tr>
+			        	<tr>
+			        		<td>Right Goal difference</td>
+			        		<td>+3 Points</td>
+			        	</tr>
+			        </table>
 			      </div>
 			    </div>
-			  </div>	
+			
+			  </div>
+			</div>	
 		</div>
 	</div>
 	</div>

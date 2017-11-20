@@ -1,8 +1,9 @@
 angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$http, $q, $timeout) {
     $scope.profile={fname:"Cheriyan",lname:"KM"};
-    
+    $scope.contentLoaded = true;
     $scope.gamePlans = [];
     
+	$scope.teams = ["ATK","KERALA BLASTERS FC","NORTHEAST UNITED FC","JAMSHEDPUR FC","CHENNAIYIN FC","FC GOA","BENGALURU FC","MUMBAI CITY FC","FC PUNE CITY","DELHI DYNAMOS FC"]
     
     $scope.mobNoOfUser = localStorage.getItem("user");
     $scope.matchChange = function(){
@@ -202,6 +203,17 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 		    	}
 		    	
 		    });
+		    $scope.data = [];
+		    $scope.objPow = $scope.gamePlans[$scope.gamePlans.length-1];
+		    $scope.objPow.match = $scope.objPow.match+1;
+		    $scope.objPow.venue = "";
+		    $scope.objPow.uri = "/games/match"+$scope.objPow.match;
+		    $scope.objPow.kickoff = "";
+		    $scope.objPow.goaldiff = 0;
+		    $scope.objPow.winner = "";
+		    $scope.objPow.opt1.goal=0;
+		    $scope.objPow.opt2.goal=0;
+		    $scope.data.push($scope.objPow);
 		}, function(error) {
 		});
 
@@ -230,8 +242,39 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 			},function(error){});
 		},function(){});
 	};
-
 	
+	$scope.dataEntry = function(){
+		$scope.contentLoaded = true;
+		$scope.getAccessToken().then(function(uaaToken){
+			var req = {
+					method : 'POST',
+					url : 'https://predix-asset.run.aws-usw02-pr.ice.predix.io/games',
+					headers : {
+						'Authorization' : 'Bearer ' +uaaToken,
+						'Content-Type' : 'application/json',
+						'Predix-Zone-Id' : '3c7bc6dd-8f09-45e5-be7f-667a90292329'
+					},
+					data:$scope.data
+				};
+				$http(req).then(function(response2) {
+					$scope.contentLoaded = false;
+				},function(error){});
+			},function(){});
+	};
+	
+	$scope.newGame = function(){
+		$scope.objPow = {};
+		$scope.objPow = angular.copy($scope.data[$scope.data.length-1]);
+	    $scope.objPow.match = $scope.objPow.match+1;
+	    $scope.objPow.venue = "";
+	    $scope.objPow.uri = "/games/match"+$scope.objPow.match;
+	    $scope.objPow.kickoff = "";
+	    $scope.objPow.goaldiff = 0;
+	    $scope.objPow.winner = "";
+	    $scope.objPow.opt1.goal=0;
+	    $scope.objPow.opt2.goal=0;
+	    $scope.data.push($scope.objPow);
+	};
 	
 	$scope.getGamePlans();
 	
@@ -271,4 +314,14 @@ angular.module('adminApp', []).controller('adminCtrl', function($scope,$window,$
 	};
 }).filter('makePositive', function() {
     return function(num) { return Math.abs(num); }
-});
+}).directive('myDate', function(dateFilter) {
+	  return {
+		    restrict: 'EAC',
+		    require: '?ngModel',
+		    link: function(scope, element, attrs, ngModel) {
+		      ngModel.$parsers.push(function(viewValue) {
+		        return dateFilter(viewValue,'dd/MM/yyyy');
+		      });
+		    }
+		  };
+		});;

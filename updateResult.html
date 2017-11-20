@@ -147,9 +147,21 @@
 				</div>
 				<div class="col-lg-8"></div>
 			</div>
-
+			
+			<div class="row updates division">
+				<div class="col-lg-12" ng-repeat="dataObject in data">
+					<input type="number" ng-model="dataObject.match">
+					<input type="date" my-date ng-model="dataObject.date">
+					<input type="text" ng-model="dataObject.venue" placeholder="Venue">
+					<select ng-options="team for team in teams" ng-model="dataObject.opt1.name"></select>
+					<select ng-options="team for team in teams" ng-model="dataObject.opt2.name"></select>
+					<button ng-click="newGame()" ng-show="data.length==data.indexOf(dataObject)+1">+</button>
+				</div>
+				<button ng-click="dataEntry()">Submit</button>
+			</div>
 			<div>
 				<p>{{ clock | date:'medium'}}</p>
+				{{data}}
 			</div>
 			</div>
 
